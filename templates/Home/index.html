@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EatzzePro - Simplify Restaurant Management</title>
+    <link rel="shortcut icon" href="{% static 'global/images/favicon.png' %}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'global/css/index.css' %}">
+
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header" id="header">
+        <div class="container">
+            <h1>EatzzePro</h1>
+            <p>Simplify your restaurant operations with our SaaS platform.</p>
+            <a href="#pricing" class="cta-button">Get Started</a>
+        </div>
+    </header>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="pricing-title">Choose Your Subscription Plan</h2>
+            <p class="pricing-subtitle">Flexible plans designed to suit your restaurant's needs.</p>
+            <div class="pricing-tiers">
+                <div class="tier" id="one-month">
+                    <h3>1 Month</h3>
+                    <p class="price">₹99</p>
+                    <ul>
+                        <li><i class="check-icon">✔</i> Full access to all features</li>
+                        <li><i class="check-icon">✔</i> QR code generation</li>
+                        <li><i class="check-icon">✔</i> Menu management</li>
+                    </ul>
+                    <button class="cta-button" onclick="showForm('1 Month', 99)">Subscribe for 1 Month</button>
+                </div>
+                <div class="tier highlighted" id="two-months">
+                    <h3>2 Months</h3>
+                    <p class="price">₹179</p>
+                    <ul>
+                        <li><i class="check-icon">✔</i> Full access to all features</li>
+                        <li><i class="check-icon">✔</i> QR code generation</li>
+                        <li><i class="check-icon">✔</i> Menu management</li>
+                    </ul>
+                    <button class="cta-button" onclick="showForm('2 Months', 179)">Subscribe for 2 Months</button>
+                </div>
+                <div class="tier" id="three-months">
+                    <h3>3 Months</h3>
+                    <p class="price">₹299</p>
+                    <ul>
+                        <li><i class="check-icon">✔</i> Full access to all features</li>
+                        <li><i class="check-icon">✔</i> QR code generation</li>
+                        <li><i class="check-icon">✔</i> Menu management</li>
+                    </ul>
+                    <button class="cta-button" onclick="showForm('3 Months', 299)">Subscribe for 3 Months</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="confirmation" id="confirmation-form" style="display: none;">
+        <div class="container">
+            <h2>Confirm Your Subscription</h2>
+            <div class="subscription-summary">
+                <h3>Selected Plan: <span id="selected-plan">None</span></h3>
+                <p>Price: ₹<span id="selected-price">0</span></p>
+                <p>Includes full access to all features, QR code generation, and menu management.</p>
+            </div>
+    
+            <!-- Registration Form -->
+            <div class="form-card">
+                <h3>Enter Your Details to Complete Registration</h3>
+                <form id="subscription-form" class="registration-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="restaurant-name">Restaurant Name:</label>
+                        <input type="text" id="restaurant-name" name="restaurant_name" placeholder="Your Restaurant Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="owner-name">Owner Name:</label>
+                        <input type="text" id="owner-name" name="owner_name" placeholder="Owner Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-number">Phone Number:</label>
+                        <input type="number" id="phone-number" name="phone_number" placeholder="Phone Number" required>
+                        <small id="phone-error" class="error-message" style="display: none; color: red;">Please enter a valid 10-digit phone number.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address:</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                        <small id="email-error" class="error-message" style="display: none; color: red;">Please enter a valid email address.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Choose a password" required>
+                        <small id="password-error" class="error-message" style="display: none; color: red;">Password must be at least 8 characters, include 1 uppercase letter, 1 lowercase letter, and 1 number.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fileinput">Upload Menu (Upload in PDF format):</label>
+                        <input type="file" id="input_file" name="input_file" accept="application/pdf,application/vnd.ms-excel" required>
+                        <small id="password-error" class="error-message" style="display: none; color: red;">Password must be at least 8 characters, include 1 uppercase letter, 1 lowercase letter, and 1 number.</small>
+                    </div>
+
+
+                    <div class="final-confirmation">
+                        <button type="submit" class="cta-button">Submit</button>
+                    </div>
+                </form>
+                
+                
+            </div>
+    
+            <!-- Back to Main Button -->
+            <button class="cta-button back-btn" onclick="goBackToMain()">Back to Main</button>
+        </div>
+    </section>
+
+    <!-- Subscription Success Section -->
+    <section class="success" id="success-message" style="display: none;">
+        <div class="success-container">
+            <h2>Subscription Request Submitted</h2>
+            <p>Your subscription request has been successfully submitted. Our team will contact you soon for form verification.</p>
+            <button class="cta-button" onclick="goBackToMain()">Back to Home</button>
+        </div>
+    </section>
+
+        <script>
+            // Validate the form before submission
+            function validateForm(event) {
+                event.preventDefault(); // Prevent form from submitting normally
+                
+                // Get form inputs
+                const phoneNumber = document.getElementById("phone-number").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value.trim();
+                
+                // Error messages
+                const phoneError = document.getElementById("phone-error");
+                const emailError = document.getElementById("email-error");
+                const passwordError = document.getElementById("password-error");
+                
+                let isValid = true;
+                
+                // Phone number validation
+                if (!/^\d{10}$/.test(phoneNumber)) {
+                    phoneError.style.display = "block";
+                    isValid = false;
+                } else {
+                    phoneError.style.display = "none";
+                }
+                
+                // Email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    emailError.style.display = "block";
+                    isValid = false;
+                } else {
+                    emailError.style.display = "none";
+                }
+                
+                // Password validation
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+                if (!passwordRegex.test(password)) {
+                    passwordError.style.display = "block";
+                    isValid = false;
+                } else {
+                    passwordError.style.display = "none";
+                }
+                
+                // If any validation fails, return false to prevent form submission
+                if (!isValid) {
+                    return false;
+                }
+                
+                // If all validations pass, submit the form via AJAX
+                const formData = new FormData(document.getElementById("subscription-form"));
+                formData.append("selected_plan", document.getElementById("selected-plan").innerText);
+                formData.append("selected_price", document.getElementById("selected-price").innerText);
+        
+                // Add CSRF token to the form
+                const csrfToken = getCSRFToken();
+        
+                // Send form data via AJAX (Fetch API)
+                fetch("/subscribe-subscription/", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': csrfToken // Add CSRF token to the headers
+                    }
+                })
+                .then(response => response.json()) // Assuming the server returns JSON
+                .then(data => {
+                    if (data.success) {
+                        // Show success message and hide other sections
+                        document.getElementById("header").style.display = "none";
+                        document.getElementById("confirmation-form").style.display = "none";
+                        document.getElementById("success-message").style.display = "block";
+                    } else {
+                        alert("There was an error with your submission. Please try again.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error submitting form:", error);
+                    alert("There was an error submitting your form. Please try again.");
+                });
+            }
+        
+            // Show the confirmation form when a subscription plan is selected
+            function showForm(plan, price) {
+                document.getElementById("selected-plan").innerText = plan;
+                document.getElementById("selected-price").innerText = price;
+                document.getElementById("pricing").style.display = "none";  // Hide pricing section
+                document.getElementById("confirmation-form").style.display = "block";  // Show subscription form
+                document.getElementById("subscription-form").reset();
+            }
+        
+            // Go back to the pricing section
+            function goBackToMain() {
+                document.getElementById("pricing").style.display = "block";  // Show pricing section
+                document.getElementById("confirmation-form").style.display = "none";  // Hide subscription form
+                document.getElementById("success-message").style.display = "none"; // Hide success message
+            }
+        
+            // Get CSRF token from the template context
+            function getCSRFToken() {
+                return document.querySelector('[name="csrfmiddlewaretoken"]').value;
+            }
+        
+            // Attach the validateForm function to form submission
+            document.getElementById("subscription-form").addEventListener("submit", validateForm);
+        </script>
+        
+        
+
+
+
+
+
+
+    
+
+    
+    
+</body>
+</html>
