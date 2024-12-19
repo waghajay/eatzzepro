@@ -10,8 +10,11 @@ from django.utils.html import strip_tags
 import threading
 from django.contrib.auth import authenticate,login,logout
 from django.middleware.csrf import get_token
-from time import time
+from datetime import datetime, date
 from django.core.cache import cache
+
+from django.utils import timezone
+
 
 # Create your views here.
 
@@ -95,6 +98,8 @@ def send_email_in_background(restaurant_email,restaurant_name, owner_name, phone
 LOGIN_RATE_LIMIT = 5
 RATE_LIMIT_TIMEOUT = 60 * 15
 
+from datetime import date
+
 def restaurant_Login(request):
     if request.method == "POST":
         email = request.POST.get('email').strip()
@@ -119,7 +124,7 @@ def restaurant_Login(request):
         # Check if email exists
         if not User.objects.filter(username=email).exists():
             cache.set(attempts_key, attempts + 1, RATE_LIMIT_TIMEOUT)
-            messages.error(request, "Please Enter the correct Email Address.")
+            messages.error(request, "Email address does not exist.")
             return render(request, 'Home/restaurant-login-page.html', {"email": email})
         
         # Authenticate user
@@ -130,7 +135,7 @@ def restaurant_Login(request):
             messages.error(request, "Incorrect password.")
             return render(request, 'Home/restaurant-login-page.html', {"email": email})
         
-        # Check if the subscription is paid
+        # Check if the subscription is valid
         restaurant_subscription = RestaurantSubscription.objects.filter(restaurant=user).first()
         if restaurant_subscription is None:
             messages.error(request, "No subscription associated with this account.")
@@ -138,6 +143,11 @@ def restaurant_Login(request):
         
         if not restaurant_subscription.is_paid:
             messages.error(request, "Your subscription is not paid yet.")
+            return render(request, 'Home/restaurant-login-page.html', {"email": email})
+        
+        # Compare expiration_date with the current date
+        if restaurant_subscription.expiration_date and restaurant_subscription.expiration_date < date.today():
+            messages.error(request, "Your subscription has expired. Please renew your subscription to continue.")
             return render(request, 'Home/restaurant-login-page.html', {"email": email})
         
         # Clear rate-limiting counters upon successful login
@@ -164,4 +174,3 @@ def get_client_ip(request):
 
 
 # ----------------- Here Views are ended for the Login  Restaurant -----------------------------
-

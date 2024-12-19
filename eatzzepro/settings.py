@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,6 +86,10 @@ DATABASES = {
     }
 }
 
+DATABASES["default"] = dj_database_url.parse("postgresql://postgres.jhqppvsthdfbgzzdbfuy:Ajay%40%40%40%40@aws-0-ap-south-1.pooler.supabase.com:6543/postgres")
+
+
+
 
 # DATABASES = {
 #     'default': {
@@ -138,7 +143,7 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR/"media" 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -154,3 +159,4 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'waghajay304@gmail.com'
 EMAIL_HOST_PASSWORD = 'emrbwfwvdkumxvhx'
 DEFAULT_FROM_EMAIL = 'info@connectme.com'
+
