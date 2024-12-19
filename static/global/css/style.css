@@ -33696,3 +33696,20 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     flex-direction: column-reverse;
   }
 }
+
+@media screen and (max-width:1024px) {
+  .eatzzepro-svg{
+    display: none;
+  }
+}
+
+.table-qr-code-image{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & img{
+    width: 70%;
+    height: 70%;
+  }
+}

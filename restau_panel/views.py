@@ -13,10 +13,16 @@ def restauDashboard(request):
     return render(request, 'restau_panel/dashboard.html')
 
 
-# def restauMenu(request):
-#     return render(request, 'restau_panel/menu.html')
+def restauMenu(request):
+    return render(request, 'restau_panel/menu.html')
 
 
 
-# def restauOrders(request):
-#     return render(request, 'restau_panel/orders.html')
+def restauOrders(request):
+    return render(request, 'restau_panel/orders.html')
+
+def restauCustomerReviews(request):
+    return render(request, 'restau_panel/customer-reviews.html')
+
+def restauTables(request):
+    return render(request, 'restau_panel/tables.html')

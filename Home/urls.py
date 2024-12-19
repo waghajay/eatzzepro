@@ -4,5 +4,5 @@ from Home.views import *
 urlpatterns = [
     path('',index,name='index'),
     path('subscribe-subscription/',subscribeSubscription,name='subscribe-subscription'),
-    path('dash/login/',restaurant_Login,name="restaurant-login")
+    path('restaurant/login/',restaurant_Login,name="restaurant-login")
 ]
