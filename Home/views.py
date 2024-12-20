@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.models import User
-from Home.models import RestaurantSubscription
+from Home.models import RestaurantSubscription,RestaurantForgotPassword
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail, EmailMultiAlternatives
@@ -12,8 +12,10 @@ from django.contrib.auth import authenticate,login,logout
 from django.middleware.csrf import get_token
 from datetime import datetime, date
 from django.core.cache import cache
-
+import uuid
 from django.utils import timezone
+from Home.email_sender import send_email_forgot_password
+from datetime import date,timedelta
 
 
 # Create your views here.
@@ -98,7 +100,7 @@ def send_email_in_background(restaurant_email,restaurant_name, owner_name, phone
 LOGIN_RATE_LIMIT = 5
 RATE_LIMIT_TIMEOUT = 60 * 15
 
-from datetime import date
+
 
 def restaurant_Login(request):
     if request.method == "POST":
@@ -171,6 +173,76 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+# ----------------- Here Views are ended for the Login  Restaurant -----------------------------
+
+
+# ------------------ Function views for the Forgot Password  -----------------------------
+
+def restaurantForgotPassword(request):
+    try:
+        if request.method == 'POST':
+            email = request.POST.get('email')
+        
+            if not User.objects.filter(username=email).exists():
+                messages.error(request, 'Email address does not exist.')
+                return render(request, 'Home/forgot-password.html')
+            
+            token = str(uuid.uuid4())            
+            
+            restaurant_obj = User.objects.filter(username=email).first()
+            restaurant_subscription_obj = RestaurantSubscription.objects.get(restaurant=restaurant_obj)
+            restaurant_forgot_password_obj = RestaurantForgotPassword.objects.create(restaurant_user=restaurant_subscription_obj,password_reset_token=token)
+            restaurant_forgot_password_obj.save()
+            
+            # Send email with the token
+            send_email_forgot_password(email, token)
+            
+            messages.success(request, 'An email has been sent to your registered email address with instructions to reset your password.')
+            return redirect('restaurant-login')
+        
+        
+    except Exception as e:
+        print(e)
+    return render(request, 'Home/forgot-password.html')
+
+
+def restaurantChangePassword(request, token):
+    context = {}
+    try:
+        restaurant_forgot_password_obj = RestaurantForgotPassword.objects.filter(password_reset_token=token).first()
+        
+        if not restaurant_forgot_password_obj:
+            messages.error(request, 'Invalid or expired password reset token.')
+            return redirect("restaurant-login")
+        
+        context = {'restaurant_id': restaurant_forgot_password_obj.restaurant_user.restaurant.id}
+        
+        if request.method == 'POST':
+            restaurant_id = request.POST.get('restaurant_id')
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
+            
+            if not restaurant_id:
+                messages.error(request, 'No Restaurant ID found.')
+                return redirect(f'/restaurant/restaurant-change-password/{token}/')
+            
+            restaurant_user = User.objects.get(id=restaurant_id)
+            restaurant_user.set_password(password)
+            restaurant_user.save()
+            
+            messages.success(request, 'Password reset successfully.')
+            return redirect("restaurant-login")
+    
+    except Exception as e:
+        print(f"Error: {e}")
+        messages.error(request, 'An error occurred. Please try again later.')
+    
+    return render(request, 'Home/change-password.html', context)
+
+
+
 
 
 # ----------------- Here Views are ended for the Login  Restaurant -----------------------------

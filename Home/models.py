@@ -26,3 +26,20 @@ class RestaurantSubscription(models.Model):
 
     def __str__(self):
         return f"Subscription for {self.restaurant_name} - {self.plan} - Paid :- {self.is_paid}"
+    
+    
+class RestaurantForgotPassword(models.Model):
+    restaurant_user = models.ForeignKey(RestaurantSubscription, on_delete=models.CASCADE)
+    password_reset_token = models.CharField(max_length=100, unique=True)
+    created_at = models.DateField(auto_now_add=True)
+    password_reset_expiration = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        # Set expiration date to 24 hours from now if not already set
+        if not self.password_reset_expiration:
+            self.password_reset_expiration = timezone.now() + timedelta(days=1)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Restaurant :- {self.restaurant_user.restaurant_name} --- Created at :- {self.created_at}"
+    
