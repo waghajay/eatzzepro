@@ -11,7 +11,6 @@ def restauLogin(request):
 
 @login_required(login_url="restaurant-login")
 def restauDashboard(request):
-    
     return render(request, 'restau_panel/dashboard.html')
 
 @login_required(login_url="restaurant-login")

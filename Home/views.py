@@ -10,12 +10,13 @@ from django.utils.html import strip_tags
 import threading
 from django.contrib.auth import authenticate,login,logout
 from django.middleware.csrf import get_token
-from datetime import datetime, date
 from django.core.cache import cache
 import uuid
 from django.utils import timezone
 from Home.email_sender import send_email_forgot_password
-from datetime import date,timedelta
+from datetime import date,timedelta,datetime
+from django.contrib.auth.decorators import login_required   
+
 
 
 # Create your views here.
@@ -107,7 +108,6 @@ def restaurant_Login(request):
         email = request.POST.get('email').strip()
         password = request.POST.get('password')
         
-        # --- Security: Rate Limiting ---
         client_ip = get_client_ip(request)
         attempts_key = f"login_attempts_{client_ip}"
         block_key = f"block_{client_ip}"
@@ -123,13 +123,11 @@ def restaurant_Login(request):
             messages.error(request, "Too many failed login attempts. Please try again later.")
             return render(request, 'Home/restaurant-login-page.html', {"email": email})
         
-        # Check if email exists
         if not User.objects.filter(username=email).exists():
             cache.set(attempts_key, attempts + 1, RATE_LIMIT_TIMEOUT)
             messages.error(request, "Email address does not exist.")
             return render(request, 'Home/restaurant-login-page.html', {"email": email})
         
-        # Authenticate user
         user = authenticate(username=email, password=password)
         
         if user is None:
@@ -137,7 +135,6 @@ def restaurant_Login(request):
             messages.error(request, "Incorrect password.")
             return render(request, 'Home/restaurant-login-page.html', {"email": email})
         
-        # Check if the subscription is valid
         restaurant_subscription = RestaurantSubscription.objects.filter(restaurant=user).first()
         if restaurant_subscription is None:
             messages.error(request, "No subscription associated with this account.")
@@ -146,16 +143,13 @@ def restaurant_Login(request):
         if not restaurant_subscription.is_paid:
             messages.error(request, "Your subscription is not paid yet.")
             return render(request, 'Home/restaurant-login-page.html', {"email": email})
-        
-        # Compare expiration_date with the current date
+
         if restaurant_subscription.expiration_date and restaurant_subscription.expiration_date < date.today():
             messages.error(request, "Your subscription has expired. Please renew your subscription to continue.")
             return render(request, 'Home/restaurant-login-page.html', {"email": email})
         
-        # Clear rate-limiting counters upon successful login
         cache.delete(attempts_key)
         
-        # Log in the user
         login(request, user)
         next_url = request.GET.get('next')
         if next_url:
@@ -173,6 +167,12 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+@login_required(login_url="restaurant-login")
+def restaurant_Logout(request):
+    logout(request)
+    return redirect("restaurant-login")
 
 
 # ----------------- Here Views are ended for the Login  Restaurant -----------------------------
@@ -196,8 +196,9 @@ def restaurantForgotPassword(request):
             restaurant_forgot_password_obj = RestaurantForgotPassword.objects.create(restaurant_user=restaurant_subscription_obj,password_reset_token=token)
             restaurant_forgot_password_obj.save()
             
-            # Send email with the token
-            send_email_forgot_password(email, token)
+            restaurant_email = restaurant_obj.email
+            
+            send_email_forgot_password(restaurant_email, token)
             
             messages.success(request, 'An email has been sent to your registered email address with instructions to reset your password.')
             return redirect('restaurant-login')
@@ -240,9 +241,6 @@ def restaurantChangePassword(request, token):
         messages.error(request, 'An error occurred. Please try again later.')
     
     return render(request, 'Home/change-password.html', context)
-
-
-
 
 
 # ----------------- Here Views are ended for the Login  Restaurant -----------------------------
