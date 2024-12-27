@@ -25,6 +25,7 @@
     <link href="{% static 'global/vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}" rel="stylesheet">
      <link href="{% static 'global/vendor/swiper/css/swiper-bundle.min.css' %}" rel="stylesheet">
 <link href="{% static 'global/css/style.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 	
 </head>
@@ -1000,41 +1001,92 @@
 
 							</div>
 
-							<!-- Modal for adding category of Menu Item -->
-							<div class="modal fade" id="exampleCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-							  <div class="modal-dialog modal-dialog-centered">
-								<div class="modal-content">
-								  <div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-								  </div>
-								  <div class="modal-body">
-									<form method="post">
-
-										<div class="modal-inside">
-											<label for="category-name" class="form-label">Category Name(max 2 words)</label>
-											<input type="text" class="form-control" id="category-name" required>
-											
-										</div>
-
-										<div class="row mt-2">
-											<div class="col-xl-12">
-												<div class="modal-inside">
-													<label for="category-description" class="form-label mb-2">Category Description</label>
-													<input type="number" class="form-control" id="category-description" required>
-												</div>
+							<!-- Modal for Adding Category -->
+								<div class="modal fade" id="exampleCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 											</div>
-											
+											<div class="modal-body">
+												<form id="addCategoryForm">
+													{% csrf_token %}
+													<div class="modal-inside">
+														<label for="category-name" class="form-label">Category Name (max 2 words)</label>
+														<input type="text" class="form-control" id="category-name" name="category_name" required>
+													</div>
+													<div class="row mt-2">
+														<div class="col-xl-12">
+															<div class="modal-inside">
+																<label for="category-description" class="form-label mb-2">Category Description</label>
+																<input type="text" class="form-control" id="category-description" name="category_description" required>
+															</div>
+														</div>
+													</div>
+													<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+														<button type="submit" class="btn btn-primary">Add Category</button>
+													</div>
+												</form>
+											</div>
 										</div>
 									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Add Category</button>
-									</div>
-								</form>
+									<script>
+										document.getElementById("addCategoryForm").addEventListener("submit", function (e) {
+											e.preventDefault(); // Prevent default form submission
+										
+											const form = e.target;
+											const formData = new FormData(form);
+										
+											fetch("{% url 'restau-add-category' %}", {
+												method: "POST",
+												headers: {
+													"X-CSRFToken": formData.get("csrfmiddlewaretoken"),
+												},
+												body: formData,
+											})
+											.then(response => response.json())
+											.then(data => {
+												console.log(data); // Log the response
+										
+												if (data.success) {
+													// Show success popup
+													Swal.fire({
+														icon: 'success',
+														title: 'Success!',
+														text: data.message,
+														confirmButtonText: 'OK',
+													}).then(() => {
+														// Optionally reload the page or reset the form
+														form.reset(); // Reset the form fields
+														const modal = bootstrap.Modal.getInstance(document.getElementById('exampleCategoryModal'));
+														modal.hide(); // Close the modal
+													});
+												} else {
+													// Show error popup
+													Swal.fire({
+														icon: 'error',
+														title: 'Oops...',
+														text: data.error || data.message,
+														confirmButtonText: 'Try Again',
+													});
+												}
+											})
+											.catch(error => {
+												console.error("Error:", error);
+												Swal.fire({
+													icon: 'error',
+													title: 'Error',
+													text: 'An unexpected error occurred. Please try again later.',
+												});
+											});
+										});
+										
+										
+									</script>
 								</div>
-							  </div>
-							</div>
+
 
 							
 							<!-- Modal for adding the Category for menus -->
@@ -2068,6 +2120,7 @@
     <script src="{% static 'global/js/custom.js' %}"></script>
 	<script src="{% static 'global/js/demo.js' %}"></script>
     <script src="{% static 'global/js/styleSwitcher.js' %}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	
 	 <script>
       var swiper = new Swiper(".mySwiper-1", {
