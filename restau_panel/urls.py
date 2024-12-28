@@ -9,4 +9,7 @@ urlpatterns = [
     path('tables/',restauTables, name='restau-tables'),
     
     path('add-category/',restauAddCategory,name='restau-add-category'),
+    path('add-menu-item/',restauAddMenuItem,name='restau-add-menu-item'),
+    path('fetch-menu-items/', fetchMenuItemsByCategory, name='fetch_menu_items_by_category'),
+
 ]
