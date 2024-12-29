@@ -1,6 +1,10 @@
 from django.db import models
 from Home.models import RestaurantSubscription
-
+import qrcode
+import jwt
+from io import BytesIO
+from django.core.files.base import ContentFile
+from django.conf import settings
 # Create your models here.
 
 class restaurantMenuCategory(models.Model):
@@ -27,6 +31,55 @@ class restaurantMenuItems(models.Model):
     def __str__(self):
         return f"Name:- {self.name} --- Price:- {self.price} Restaurant Name:- {self.category.restaurant.restaurant_name}" 
      
+     
+class restaurantTable(models.Model):
+    restaurant = models.ForeignKey(RestaurantSubscription, on_delete=models.CASCADE)  # Reference to the restaurant
+    number = models.IntegerField()
+    qr_code_url = models.URLField(blank=True, null=True)
+    qr_code_image = models.ImageField(upload_to='QR_codes/', blank=True, null=True)
+    qr_data = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def generate_qr_code(self):
+        # Embed data about the table and restaurant in the QR code
+        table_data = {
+            'table_number': self.number,
+            'restaurant_id': self.restaurant.id  # Include restaurant ID to differentiate between restaurants
+        }
+
+        # Encode the data into a JWT
+        token = jwt.encode(table_data, settings.SECRET_KEY, algorithm='HS256')
+
+        # Generate QR code with the encoded token
+        external_url = f"http://127.0.0.1:8000/{self.restaurant.id}/menu/"  # Unique URL for each restaurant
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(external_url + f"?qr_data={token}")
+        qr.make(fit=True)
+
+        # Create a BytesIO buffer to save the image
+        buffer = BytesIO()
+        img = qr.make_image(fill_color="black", back_color="white")
+        img.save(buffer, format='PNG')
+
+        # Save the QR code image in the model
+        self.qr_code_image.save(f"{self.restaurant.id}_table_{self.number}.png", ContentFile(buffer.getvalue()))
+        self.qr_code_url = external_url + f"?qr_data={token}"
+        self.qr_data = token
+
+    def save(self, *args, **kwargs):
+        # Check if the model is being saved for the first time or if some other condition applies
+        if not self.qr_code_image:
+            self.generate_qr_code()
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"Table {self.number} - {self.restaurant.restaurant_name}"
     
     
 

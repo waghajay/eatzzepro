@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhonePe QR Code</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      text-align: center;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+      font-size: 48px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .logo span {
+      background-color: #6541d6;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 36px;
+      margin-right: 10px;
+    }
+    .accepted {
+      color: #6541d6;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .instruction {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .qr-code {
+      margin: 20px 0;
+    }
+    .name {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .footer {
+      font-size: 12px;
+      color: #555;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <span><img src="https://foddesk.pythonanywhere.com/static/global/images/eatzze-modified.png" width="50" height="50" alt=""></span> <u style="text-decoration: none; color: #E0111C;margin-left: 5px;">eatZzepro</u>
+    </div>
+    <div class="accepted">Table Number :- {{ table_number }}</div>
+    <div class="instruction">Scan to Order</div>
+    <div class="qr-code">
+      <img src="data:image/png;base64,{{ qr_code_image_base64 }}" alt="QR Code" width="200">
+    </div>
+    <div class="name">{{ restaurant_name }}</div>
+    <div class="footer">© 2024, All rights reserved, @eatZzepro.</div>
+  </div>
+</body>
+</html>

@@ -86,7 +86,7 @@ DATABASES = {
     }
 }
 
-DATABASES["default"] = dj_database_url.parse("postgresql://postgres.jhqppvsthdfbgzzdbfuy:Ajay%40%40%40%40@aws-0-ap-south-1.pooler.supabase.com:6543/postgres")
+# DATABASES["default"] = dj_database_url.parse("postgresql://postgres.jhqppvsthdfbgzzdbfuy:Ajay%40%40%40%40@aws-0-ap-south-1.pooler.supabase.com:6543/postgres")
 
 
 
@@ -127,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
