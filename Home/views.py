@@ -292,6 +292,7 @@ def show_menu(request, restaurant_id):
         'categories': categories,
         'menu_items': menu_items,
         'table_number': table_number,
+        'restaurant_id' : restaurant_id
     }
     return render(request, 'Home/show_menu.html', context)
 
@@ -307,25 +308,43 @@ def show_menu(request, restaurant_id):
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
 from restau_panel.models import restaurantMenuItems, restaurantOrder, restaurantOrderItem
 import json
+
 
 def checkout(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
             items = data.get('items', [])
+            restaurant_id = data.get('restaurant_id')
+
+            
+            try:
+                restaurant_id = int(restaurant_id)
+                print(f"Restaurant ID: {restaurant_id}")  
+            except (ValueError, TypeError):
+                return JsonResponse({'success': False, 'error': 'Invalid restaurant ID'}, status=400)
+
+            
+            try:
+                restaurant = RestaurantSubscription.objects.get(id=restaurant_id)  
+                
+            except RestaurantSubscription.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Restaurant not found'}, status=404)
+
             if not items:
                 return JsonResponse({'success': False, 'error': 'No items provided'}, status=400)
 
-            # Get or create the session ID
+            
             session_id = request.session.session_key
             if not session_id:
                 request.session.create()
                 session_id = request.session.session_key
 
             total_price = 0
-            order_items = []  # To store the items we need to associate with the order
+            order_items = [] 
 
             for item in items:
                 menu_item_id = item.get('menu_item_id')
@@ -339,19 +358,23 @@ def checkout(request):
 
                 total_price += quantity * price
 
-                # Increment the order_times for the menu item
-                menu_item.order_times += quantity  # Increase by the ordered quantity
+                
+                menu_item.order_times += quantity
                 menu_item.save()
 
-                # Prepare order items to be associated with the order
+                
                 order_items.append({
                     'menu_item': menu_item,
                     'quantity': quantity,
                     'price': price
                 })
 
-            # Save the order with the session ID
-            order = restaurantOrder.objects.create(session_id=session_id, total_price=total_price)
+           
+            order = restaurantOrder.objects.create(
+                restaurant=restaurant,
+                session_id=session_id,
+                total_price=total_price,
+            )
 
             # Save the items associated with this order
             for order_item in order_items:
@@ -373,11 +396,12 @@ def checkout(request):
 
 
 
+
 def order_history(request):
     # Get the session ID from the current session
     session_id = request.session.session_key
     if not session_id:
-        return render(request, 'error.html', {'error': 'No session found. Please place an order first.'})
+        return HttpResponse('<h4>No session found. Please place an order first.</h4>')
 
     # Retrieve orders for this session
     orders = restaurantOrder.objects.filter(session_id=session_id).order_by('-created_at')

@@ -245,6 +245,8 @@
           </div>
         </div>
 
+        <div id="restaurant-info" data-restaurant-id="{{ restaurant_id }}"></div>
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
           document.querySelector('.checkout-btn').addEventListener('click', function (event) {
@@ -253,64 +255,72 @@
             const items = [];
             const quantityInputs = document.querySelectorAll('.quantity-input');
         
+            // Get the restaurant ID from the data attribute
+            const restaurantInfo = document.getElementById('restaurant-info');
+            const restaurantId = restaurantInfo ? restaurantInfo.dataset.restaurantId : null;
+        
             quantityInputs.forEach(input => {
-              const quantity = parseInt(input.value);
-              if (quantity > 0) {
-                items.push({
-                  menu_item_id: input.dataset.itemId,
-                  quantity: quantity,
-                  price: parseFloat(input.dataset.price)
-                });
-              }
+                const quantity = parseInt(input.value);
+                if (quantity > 0) {
+                    items.push({
+                        menu_item_id: input.dataset.itemId,
+                        quantity: quantity,
+                        price: parseFloat(input.dataset.price)
+                    });
+                }
             });
         
-            if (items.length > 0) {
-              fetch('/checkout/', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRFToken': '{{ csrf_token }}' // Add CSRF token for security
-                },
-                body: JSON.stringify({ items: items })
-              })
+            if (items.length > 0 && restaurantId) {
+                fetch('/checkout/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}' // Add CSRF token for security
+                    },
+                    body: JSON.stringify({
+                        items: items,
+                        restaurant_id: restaurantId // Include restaurant_id in the payload
+                    })
+                })
                 .then(response => response.json())
                 .then(data => {
-                  if (data.success) {
-                    Swal.fire({
-                      title: 'Order Placed!',
-                      text: 'Redirecting to your order history...',
-                      icon: 'success',
-                      timer: 2000,
-                      showConfirmButton: false
-                    }).then(() => {
-                      window.location.href = '/order-history/';
-                    });
-                  } else {
-                    Swal.fire({
-                      title: 'Error',
-                      text: data.error || 'Failed to place the order. Please try again.',
-                      icon: 'error',
-                      confirmButtonText: 'Retry'
-                    });
-                  }
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Order Placed!',
+                            text: 'Redirecting to your order history...',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = '/order-history/';
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.error || 'Failed to place the order. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'Retry'
+                        });
+                    }
                 })
                 .catch(error => {
-                  Swal.fire({
-                    title: 'Error',
-                    text: 'An error occurred. Please try again later.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                  });
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again later.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 });
             } else {
-              Swal.fire({
-                title: 'No Items Selected',
-                text: 'Please add at least one item to proceed.',
-                icon: 'warning',
-                confirmButtonText: 'OK'
-              });
+                Swal.fire({
+                    title: 'No Items Selected',
+                    text: 'Please add at least one item to proceed.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
             }
-          });
+        });
+        
         </script>
         
 
