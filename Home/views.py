@@ -1,5 +1,5 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse,JsonResponse
+from django.shortcuts import render,redirect,get_object_or_404
+from django.http import HttpResponse,JsonResponse,HttpResponseForbidden
 from django.contrib.auth.models import User
 from Home.models import RestaurantSubscription,RestaurantForgotPassword
 from django.contrib import messages
@@ -15,7 +15,9 @@ import uuid
 from django.utils import timezone
 from Home.email_sender import send_email_forgot_password
 from datetime import date,timedelta,datetime
-from django.contrib.auth.decorators import login_required   
+from django.contrib.auth.decorators import login_required  
+import jwt
+from restau_panel.models import restaurantMenuCategory, restaurantMenuItems, restaurantTable
 
 
 
@@ -244,3 +246,148 @@ def restaurantChangePassword(request, token):
 
 
 # ----------------- Here Views are ended for the Login  Restaurant -----------------------------
+
+
+
+# ------------------ Function views for the Showing the Menu of the restaurant  -----------------------------
+
+def show_menu(request, restaurant_id):
+    # Get the QR data from the URL
+    qr_data = request.GET.get('qr_data')
+    
+    if not qr_data:
+        return HttpResponseForbidden("QR data is missing or invalid.")
+    
+    check_qr_data = restaurantTable.objects.filter(qr_data=qr_data)  
+    if not check_qr_data:
+        return HttpResponseForbidden("<h4>Invalid QR Code / Table's QR Code is Deleted. please try to scan new QR code.</h4>")
+    
+    try:
+        # Decode the QR data using the secret key
+        decoded_data = jwt.decode(qr_data, settings.SECRET_KEY, algorithms=['HS256'])
+        table_number = decoded_data.get('table_number')
+        decoded_restaurant_id = decoded_data.get('restaurant_id')
+
+        # Validate restaurant ID
+        if int(decoded_restaurant_id) != restaurant_id:
+            return HttpResponseForbidden("Invalid restaurant information.")
+        
+        # Get the restaurant and associated categories
+        restaurant = get_object_or_404(RestaurantSubscription, id=restaurant_id)
+        categories = restaurant.categories.filter(is_active=True)
+        
+        # Get all menu items associated with the restaurant
+        menu_items = restaurantMenuItems.objects.filter(category__restaurant=restaurant, availability=True)
+    
+    except jwt.ExpiredSignatureError:
+        return HttpResponseForbidden("QR code has expired.")
+    except jwt.InvalidTokenError:
+        return HttpResponseForbidden("Invalid QR data.")
+    except Exception as e:
+        return HttpResponseForbidden(f"An error occurred: {str(e)}")
+
+    # Prepare context data for rendering
+    context = {
+        'restaurant': restaurant,
+        'categories': categories,
+        'menu_items': menu_items,
+        'table_number': table_number,
+    }
+    return render(request, 'Home/show_menu.html', context)
+
+
+
+
+
+
+# ------------------ Here Views are ended for the Showing the Menu of the restaurant  -----------------------------
+
+
+# ------------------ Function views for the Processing the checkout functionality  -----------------------------
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from restau_panel.models import restaurantMenuItems, restaurantOrder, restaurantOrderItem
+import json
+
+def checkout(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            items = data.get('items', [])
+            if not items:
+                return JsonResponse({'success': False, 'error': 'No items provided'}, status=400)
+
+            # Get or create the session ID
+            session_id = request.session.session_key
+            if not session_id:
+                request.session.create()
+                session_id = request.session.session_key
+
+            total_price = 0
+            order_items = []  # To store the items we need to associate with the order
+
+            for item in items:
+                menu_item_id = item.get('menu_item_id')
+                quantity = item.get('quantity', 0)
+                price = item.get('price', 0.0)
+
+                try:
+                    menu_item = restaurantMenuItems.objects.get(id=menu_item_id)
+                except restaurantMenuItems.DoesNotExist:
+                    return JsonResponse({'success': False, 'error': f'Invalid menu item ID: {menu_item_id}'}, status=400)
+
+                total_price += quantity * price
+
+                # Increment the order_times for the menu item
+                menu_item.order_times += quantity  # Increase by the ordered quantity
+                menu_item.save()
+
+                # Prepare order items to be associated with the order
+                order_items.append({
+                    'menu_item': menu_item,
+                    'quantity': quantity,
+                    'price': price
+                })
+
+            # Save the order with the session ID
+            order = restaurantOrder.objects.create(session_id=session_id, total_price=total_price)
+
+            # Save the items associated with this order
+            for order_item in order_items:
+                restaurantOrderItem.objects.create(
+                    order=order,
+                    menu_item=order_item['menu_item'],
+                    quantity=order_item['quantity'],
+                    price=order_item['price']
+                )
+
+            return JsonResponse({'success': True, 'order_id': order.id})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+
+
+
+
+def order_history(request):
+    # Get the session ID from the current session
+    session_id = request.session.session_key
+    if not session_id:
+        return render(request, 'error.html', {'error': 'No session found. Please place an order first.'})
+
+    # Retrieve orders for this session
+    orders = restaurantOrder.objects.filter(session_id=session_id).order_by('-created_at')
+
+    # Pass orders to the template
+    return render(request, 'Home/user_order_history.html', {'orders': orders})
+
+
+
+
+# ------------------ Here Views are ended for the Processing the checkout functionality  -----------------------------
+
+

@@ -37,7 +37,7 @@ class restaurantTable(models.Model):
     number = models.IntegerField()
     qr_code_url = models.URLField(blank=True, null=True)
     qr_code_image = models.ImageField(upload_to='QR_codes/', blank=True, null=True)
-    qr_data = models.CharField(max_length=255, blank=True, null=True)
+    qr_data = models.CharField(max_length=255, blank=True, null=True,unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def generate_qr_code(self):
@@ -80,6 +80,34 @@ class restaurantTable(models.Model):
 
     def __str__(self):
         return f"Table {self.number} - {self.restaurant.restaurant_name}"
+    
+    
+    
+class restaurantOrder(models.Model):
+    order_status = (
+        ('Pending','Pending'),
+        ('Accepted','Accepted'),
+        ('Rejected', "Rejected")
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    session_id = models.CharField(max_length=255, blank=True, null=True)
+    order_status = models.CharField(max_length=30,choices=order_status,default="Pending")
+    
+    def __str__(self):
+        return f"Order ID :- {self.id} --- Amount :- {self.total_price}"
+    
+    
+    
+class restaurantOrderItem(models.Model):
+    order = models.ForeignKey(restaurantOrder, on_delete=models.CASCADE, related_name='items')
+    menu_item = models.ForeignKey(restaurantMenuItems, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    def __str__(self):
+        return f"Order ID :- {self.id} ---- Menu Item :- {self.menu_item.name} ---- Quantity :- {self.quantity} ---- Price :- {self.price}"
+    
     
     
 

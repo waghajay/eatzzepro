@@ -144,7 +144,7 @@ class restauTables(View):
     def get(self, request, *args, **kwargs):
         # Fetch the logged-in user's restaurant
         restaurant = RestaurantSubscription.objects.get(restaurant=request.user)
-        tables = restaurantTable.objects.filter(restaurant=restaurant)  # Fetch tables for the logged-in restaurant
+        tables = restaurantTable.objects.filter(restaurant=restaurant).order_by('number')  # Fetch tables for the logged-in restaurant
         return render(request, self.template_name, {"tables": tables, "restaurant": restaurant})
 
     def post(self, request, *args, **kwargs):

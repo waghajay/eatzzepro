@@ -1,5 +1,5 @@
 from django.contrib import admin
-from restau_panel.models import restaurantMenuCategory,restaurantMenuItems,restaurantTable
+from restau_panel.models import restaurantMenuCategory,restaurantMenuItems,restaurantTable,restaurantOrder,restaurantOrderItem
 
 # Register your models here.
 
@@ -19,4 +19,14 @@ class RestaurantTableAdmin(admin.ModelAdmin):
     list_display = ('number','restaurant')
     search_fields = ('number', 'qr_code_url')
     
+@admin.register(restaurantOrder)
+class RestaurantOrderAdmin(admin.ModelAdmin):
+    list_display = ('id','total_price')
+    search_fields = ('id','total_price')
+
+
+@admin.register(restaurantOrderItem)
+class RestaurantOrderItemsAdmin(admin.ModelAdmin):
+    list_display = ('id','menu_item','quantity','price')
+    search_fields = ('id','menu_item','quantity,price')
 
