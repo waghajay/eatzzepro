@@ -140,7 +140,8 @@
                   <div class="card h-auto b-hover">
                     <div class="card-body px-3">
                       <div class="text-center">
-                        <h4>Order Number : {{ order.id }}</h4>
+                        <h4>Order ID : {{ order.id }}</h4>
+                        <h5>Table Number : {{ order.table_Number }}</h5>
                         <p>{{ order.created_at|date:"M d, Y, H:i A" }}</p>
                       </div>
                       <hr>

@@ -9,7 +9,7 @@ from io import BytesIO
 import os
 import base64
 from Home.models import RestaurantSubscription
-from .models import restaurantMenuCategory, restaurantMenuItems, restaurantTable
+from .models import restaurantMenuCategory, restaurantMenuItems, restaurantTable,restaurantOrder, restaurantOrderItem
 from django.conf import settings
 
 
@@ -128,7 +128,40 @@ def fetchMenuItemsByCategory(request):
 # View for restaurant orders page
 @login_required(login_url="restaurant-login")
 def restauOrders(request):
+    
+    try:       
+        user = request.user
+        restaurant_order = restaurantOrder.objects.filter(restaurant__restaurant=user)
+        context = { 'restaurant_order' : restaurant_order }
+        return render(request, "restau_panel/orders.html", context)
+    
+    except RestaurantOrder.DoesNotExist:
+        print("Restaurant order does not exist")
+        
     return render(request, "restau_panel/orders.html")
+
+
+@login_required(login_url="restaurant-login")
+def fetch_order_details(request, order_id):
+    order = get_object_or_404(restaurantOrder, id=order_id)
+    items = order.items.all()
+    
+    order_data = {
+        "id": order.id,
+        "table_number": order.table_Number,
+        "created_at": order.created_at.strftime("%B %d, %Y, %I:%M %p"),
+        "total_price": float(order.total_price),
+        "status": order.order_status,
+        "items": [
+            {
+                "name": item.menu_item.name,
+                "quantity": item.quantity,
+                "price": float(item.price),
+            }
+            for item in items
+        ],
+    }
+    return JsonResponse(order_data)
 
 
 # View for restaurant customer reviews page

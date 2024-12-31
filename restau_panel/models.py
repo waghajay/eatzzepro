@@ -90,6 +90,7 @@ class restaurantOrder(models.Model):
         ('Rejected', "Rejected")
     )
     restaurant = models.ForeignKey(RestaurantSubscription, on_delete=models.CASCADE,null=True)
+    table_Number = models.CharField(max_length=10,null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     session_id = models.CharField(max_length=255, blank=True, null=True)

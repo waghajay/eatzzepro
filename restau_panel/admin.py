@@ -21,12 +21,12 @@ class RestaurantTableAdmin(admin.ModelAdmin):
     
 @admin.register(restaurantOrder)
 class RestaurantOrderAdmin(admin.ModelAdmin):
-    list_display = ('id','total_price')
-    search_fields = ('id','total_price')
+    list_display = ('id','restaurant', 'total_price', 'table_Number')
+    search_fields = ('id','total_price','table_Number')
 
 
 @admin.register(restaurantOrderItem)
 class RestaurantOrderItemsAdmin(admin.ModelAdmin):
-    list_display = ('id','menu_item','quantity','price')
+    list_display = ('id', 'order','menu_item','quantity','price')
     search_fields = ('id','menu_item','quantity,price')
 

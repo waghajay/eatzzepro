@@ -246,6 +246,7 @@
         </div>
 
         <div id="restaurant-info" data-restaurant-id="{{ restaurant_id }}"></div>
+        <div id="table-info" data-table-Number="{{ table_number }}"></div>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
@@ -257,7 +258,10 @@
         
             // Get the restaurant ID from the data attribute
             const restaurantInfo = document.getElementById('restaurant-info');
+            const tableInfo = document.getElementById('table-info');
             const restaurantId = restaurantInfo ? restaurantInfo.dataset.restaurantId : null;
+            const tableNumber = tableInfo ? tableInfo.dataset.tableNumber : null;
+            console.log(tableNumber);
         
             quantityInputs.forEach(input => {
                 const quantity = parseInt(input.value);
@@ -279,7 +283,8 @@
                     },
                     body: JSON.stringify({
                         items: items,
-                        restaurant_id: restaurantId // Include restaurant_id in the payload
+                        restaurant_id: restaurantId, // Include restaurant_id in the payload
+                        table_Number : tableNumber
                     })
                 })
                 .then(response => response.json())

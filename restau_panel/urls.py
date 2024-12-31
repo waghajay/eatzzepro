@@ -13,6 +13,7 @@ urlpatterns = [
     path('fetch-menu-items/', fetchMenuItemsByCategory, name='fetch_menu_items_by_category'),
     path('generate-image/<int:table_id>/', generate_pdf_from_html, name='generate_image_card'),
     path('delete_qr_code/<int:table_id>/', delete_qr_code, name='delete_qr_code'),
+    path('fetch-order-details/<order_id>/', fetch_order_details, name='fetch_order_details'),
     
     
 ]

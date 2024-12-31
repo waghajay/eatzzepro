@@ -319,8 +319,8 @@ def checkout(request):
             data = json.loads(request.body)
             items = data.get('items', [])
             restaurant_id = data.get('restaurant_id')
+            tableNumber = data.get('table_Number')
 
-            
             try:
                 restaurant_id = int(restaurant_id)
                 print(f"Restaurant ID: {restaurant_id}")  
@@ -336,6 +336,12 @@ def checkout(request):
 
             if not items:
                 return JsonResponse({'success': False, 'error': 'No items provided'}, status=400)
+            
+            try:
+                tableNumber = int(tableNumber)
+                print(f"Table NUmber: {tableNumber}")  
+            except (ValueError, TypeError):
+                return JsonResponse({'success': False, 'error': 'Invalid Table Number'}, status=400)
 
             
             session_id = request.session.session_key
@@ -372,6 +378,7 @@ def checkout(request):
            
             order = restaurantOrder.objects.create(
                 restaurant=restaurant,
+                table_Number=tableNumber,
                 session_id=session_id,
                 total_price=total_price,
             )
