@@ -1,5 +1,5 @@
 from django.contrib import admin
-from restau_panel.models import restaurantMenuCategory,restaurantMenuItems,restaurantTable,restaurantOrder,restaurantOrderItem
+from restau_panel.models import restaurantMenuCategory,restaurantMenuItems,restaurantTable,restaurantOrder,restaurantOrderItem,restaurantOrderReview
 
 # Register your models here.
 
@@ -30,3 +30,5 @@ class RestaurantOrderItemsAdmin(admin.ModelAdmin):
     list_display = ('id', 'order','menu_item','quantity','price')
     search_fields = ('id','menu_item','quantity,price')
 
+
+admin.site.register(restaurantOrderReview)

@@ -14,6 +14,9 @@ urlpatterns = [
     path('generate-image/<int:table_id>/', generate_pdf_from_html, name='generate_image_card'),
     path('delete_qr_code/<int:table_id>/', delete_qr_code, name='delete_qr_code'),
     path('fetch-order-details/<order_id>/', fetch_order_details, name='fetch_order_details'),
+    path('accept_order/<order_id>/', accept_order, name='accept_order'),
+    path('reject_order/<order_id>/', reject_order, name='reject_order'),
+    path('submit_review/<int:order_id>/', submit_review, name='submit_review'),
     
     
 ]

@@ -9,8 +9,9 @@ from io import BytesIO
 import os
 import base64
 from Home.models import RestaurantSubscription
-from .models import restaurantMenuCategory, restaurantMenuItems, restaurantTable,restaurantOrder, restaurantOrderItem
+from .models import restaurantMenuCategory, restaurantMenuItems, restaurantTable,restaurantOrder, restaurantOrderItem,restaurantOrderReview
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 
 
 # View for the restaurant login page
@@ -131,7 +132,7 @@ def restauOrders(request):
     
     try:       
         user = request.user
-        restaurant_order = restaurantOrder.objects.filter(restaurant__restaurant=user)
+        restaurant_order = restaurantOrder.objects.filter(restaurant__restaurant=user).order_by("-created_at")
         context = { 'restaurant_order' : restaurant_order }
         return render(request, "restau_panel/orders.html", context)
     
@@ -164,10 +165,84 @@ def fetch_order_details(request, order_id):
     return JsonResponse(order_data)
 
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+def accept_order(request, order_id):
+    if request.method == "POST":
+        try:
+            order_obj = restaurantOrder.objects.filter(id=order_id).first()
+            if order_obj:
+                order_obj.order_status = "Accepted"
+                order_obj.save()
+                return JsonResponse({"success": True, "message": "Order Accepted Successfully"})
+            else:
+                return JsonResponse({"success": False, "error": "Order not found."})
+        except Exception as e:
+            print("Error accepting order:", e)
+            return JsonResponse({"success": False, "error": "An error occurred while accepting the order."})
+    return JsonResponse({"success": False, "error": "Invalid request method."})
+
+def reject_order(request, order_id):
+    if request.method == "POST":
+        try:
+            order_obj = restaurantOrder.objects.filter(id=order_id).first()
+            if order_obj:
+                order_obj.order_status = "Rejected"
+                order_obj.save()
+                return JsonResponse({"success": True, "message": "Order Rejected Successfully"})
+            else:
+                return JsonResponse({"success": False, "error": "Order not found."})
+        except Exception as e:
+            print("Error rejecting order:", e)
+            return JsonResponse({"success": False, "error": "An error occurred while rejecting the order."})
+    return JsonResponse({"success": False, "error": "Invalid request method."})
+
+
+
 # View for restaurant customer reviews page
 @login_required(login_url="restaurant-login")
 def restauCustomerReviews(request):
     return render(request, "restau_panel/customer-reviews.html")
+
+
+  # Assuming you have Review and Order models
+
+
+def submit_review(request, order_id):
+    if request.method == 'POST':
+        try:
+            # Get the order
+            order_obj = restaurantOrder.objects.get(id=order_id)
+
+            # Get the review and rating from the request
+            review_text = request.POST.get('review')
+            rating = request.POST.get('rating')
+
+            if not review_text or not rating:
+                messages.success(request, 'Review and rating are required')
+                return redirect("order_history")
+
+            # Save the review
+            review = restaurantOrderReview.objects.create(
+                order=order_obj,
+                review_text=review_text,
+                rating=rating,
+            )
+
+            messages.success(request, 'Review Submitted successfully...')
+            return redirect("order_history")
+        except Order.DoesNotExist:
+            messages.success(request, 'Order not found.')
+            return redirect("order_history")
+        except Exception as e:
+            messages.success(request, 'errors were encountered')
+            return redirect("order_history")
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=405)
+        
+
+
 
 
 # View for restaurant tables management

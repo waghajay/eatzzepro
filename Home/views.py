@@ -17,7 +17,7 @@ from Home.email_sender import send_email_forgot_password
 from datetime import date,timedelta,datetime
 from django.contrib.auth.decorators import login_required  
 import jwt
-from restau_panel.models import restaurantMenuCategory, restaurantMenuItems, restaurantTable
+from restau_panel.models import restaurantMenuCategory, restaurantMenuItems, restaurantTable,restaurantOrderReview
 
 
 
@@ -323,7 +323,6 @@ def checkout(request):
 
             try:
                 restaurant_id = int(restaurant_id)
-                print(f"Restaurant ID: {restaurant_id}")  
             except (ValueError, TypeError):
                 return JsonResponse({'success': False, 'error': 'Invalid restaurant ID'}, status=400)
 
@@ -339,7 +338,6 @@ def checkout(request):
             
             try:
                 tableNumber = int(tableNumber)
-                print(f"Table NUmber: {tableNumber}")  
             except (ValueError, TypeError):
                 return JsonResponse({'success': False, 'error': 'Invalid Table Number'}, status=400)
 
@@ -413,8 +411,19 @@ def order_history(request):
     # Retrieve orders for this session
     orders = restaurantOrder.objects.filter(session_id=session_id).order_by('-created_at')
 
-    # Pass orders to the template
+    # For each order, check if there is an associated review
+    for order in orders:
+        order.review = restaurantOrderReview.objects.filter(order=order).first()
+        # Create a list of stars based on the rating
+        if order.review:
+            order.stars = ['filled'] * order.review.rating + ['empty'] * (5 - order.review.rating)
+        else:
+            order.stars = []
+
+    # Pass orders (with reviews, if any) to the template
     return render(request, 'Home/user_order_history.html', {'orders': orders})
+
+
 
 
 

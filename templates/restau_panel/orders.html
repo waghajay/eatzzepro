@@ -981,8 +981,8 @@
 								</div>
 							</div>
 							<div class="text-end">
-								<a href="javascript:void(0);" class="btn btn-outline-danger me-sm-4 me-2">Reject Order</a>
-								<a href="javascript:void(0);" class="btn btn-primary">Accept Order</a>
+								<a href="javascript:void(0);" class="btn btn-outline-danger me-sm-4 me-2" id="reject-btn">Reject Order</a>
+								<a href="javascript:void(0);" class="btn btn-primary" id="accept-button">Accept Order</a>
 							</div>
 						</div>
 					</div>
@@ -1017,69 +1017,182 @@
 					
 				</div>
 
-
 				<script>
 					document.addEventListener("DOMContentLoaded", function () {
-						const orderBoxes = document.querySelectorAll(".orderin-bx");
-						const orderDetailsSection = document.getElementById("order-details-section");
-						const orderDetailsBody = orderDetailsSection.querySelector(".card-body");
-					
-						orderBoxes.forEach(box => {
-							box.addEventListener("click", function () {
-								const orderId = this.getAttribute("data-order-id");
-					
-								// Fetch order details
-								fetch(`/restaurant/fetch-order-details/${orderId}/`)
-									.then(response => response.json())
-									.then(data => {
-										// Populate order details
-										let itemsHTML = "";
-										data.items.forEach(item => {
-											itemsHTML += `
-												<div class="d-flex align-items-center mb-4">
-													<div>
-														<h4 class="font-w600 text-nowrap mb-0"><a href="javascript:void(0);">&#8226 ${item.name}</a></h4>
-														<p class="mb-0">x${item.quantity}</p>
-													</div>
-													<h4 class="text-primary mb-0 ms-auto">+₹${item.price}</h4>
-												</div>
-											`;
-										});
-					
-										// Update the order details section
-										orderDetailsBody.innerHTML = `
-											<div class="d-flex align-items-center justify-content-between border-bottom flex-wrap">
-												<div class="mb-4">
-													<h4 class="font-w500">Table Number : ${data.table_number}</h4>
-													<h5 class="font-w500">Order ID : ${data.id}</h5>
-													<span>${data.created_at}</span>
-												</div>
-											</div>
-											<div class="order-menu style-1 mt-3">
-												<h4>Ordered Menu</h4>
-												<hr style="opacity:0.7" />
-												${itemsHTML}
-											</div>
-											<hr style="opacity:0.7" />
-											<div class="d-flex align-items-center justify-content-between">
-												<h4 class="font-w500 mb-0">&#8226 Total</h4>
-												<h4 class="cate-title text-primary">₹${data.total_price}</h4>
-											</div>
-										`;
-					
-										// Show the order details section
-										orderDetailsSection.style.display = "block";
-									})
-									.catch(error => {
-										console.error("Error fetching order details:", error);
-									});
+					  const orderBoxes = document.querySelectorAll(".orderin-bx");
+					  const orderDetailsSection = document.getElementById("order-details-section");
+					  const orderDetailsBody = orderDetailsSection.querySelector(".card-body");
+					  const rejectButton = document.getElementById("reject-btn");
+					  const acceptButton = document.getElementById("accept-button");
+				  
+					  orderBoxes.forEach(box => {
+						box.addEventListener("click", function () {
+						  const orderId = this.getAttribute("data-order-id");
+				  
+						  // Fetch order details
+						  fetch(`/restaurant/fetch-order-details/${orderId}/`)
+							.then(response => response.json())
+							.then(data => {
+							  // Populate order details
+							  let itemsHTML = "";
+							  data.items.forEach(item => {
+								itemsHTML += `
+								  <div class="d-flex align-items-center mb-4">
+									<div>
+									  <h4 class="font-w600 text-nowrap mb-0"><a href="javascript:void(0);">&#8226 ${item.name}</a></h4>
+									  <p class="mb-0">x${item.quantity}</p>
+									</div>
+									<h4 class="text-primary mb-0 ms-auto">+₹${item.price}</h4>
+								  </div>
+								`;
+							  });
+				  
+							  // Update the order details section
+							  orderDetailsBody.innerHTML = `
+								<div class="d-flex align-items-center justify-content-between border-bottom flex-wrap">
+								  <div class="mb-4">
+									<h4 class="font-w500">Table Number : ${data.table_number}</h4>
+									<h5 class="font-w500">Order ID : ${data.id}</h5>
+									<h5 class="font-w500">Order Status : <u style="font-size:17px">${data.status}</u></h5>
+									<span>${data.created_at}</span>
+								  </div>
+								</div>
+								<div class="order-menu style-1 mt-3">
+								  <h4>Ordered Menu</h4>
+								  <hr style="opacity:0.7" />
+								  ${itemsHTML}
+								</div>
+								<hr style="opacity:0.7" />
+								<div class="d-flex align-items-center justify-content-between">
+								  <h4 class="font-w500 mb-0">&#8226 Total</h4>
+								  <h4 class="cate-title text-primary">₹${data.total_price}</h4>
+								</div>
+							  `;
+				  
+							  // Set the orderId to the Reject and Accept buttons dynamically
+							  rejectButton.setAttribute("data-order-id", data.id);
+							  acceptButton.setAttribute("data-order-id", data.id);
+				  
+							  // Show the order details section
+							  orderDetailsSection.style.display = "block";
+							})
+							.catch(error => {
+							  console.error("Error fetching order details:", error);
 							});
 						});
+					  });
 					});
-					
-						
-					
-				</script>
+				  </script>
+
+				  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+				  <script>
+					document.addEventListener("DOMContentLoaded", function () {
+						const rejectButton = document.getElementById("reject-btn");
+						const acceptButton = document.getElementById("accept-button");
+					  
+						// Event listener for Reject Order button
+						rejectButton.addEventListener("click", function () {
+						  const orderId = rejectButton.getAttribute("data-order-id");
+						  if (orderId) {
+							fetch(`/restaurant/reject_order/${orderId}/`, {
+							  method: "POST",
+							  headers: {
+								"Content-Type": "application/json",
+								"X-CSRFToken": getCSRFToken(), // Include CSRF token if using Django
+							  },
+							})
+							  .then(response => {
+								if (response.ok) {
+								  Swal.fire({
+									icon: "success",
+									title: "Order Rejected",
+									text: "The order has been successfully rejected!",
+								  }).then(() => {
+									// Optionally update UI
+									hideOrderDetails();
+								  });
+								} else {
+								  Swal.fire({
+									icon: "error",
+									title: "Failed to Reject Order",
+									text: "There was an error rejecting the order. Please try again.",
+								  });
+								}
+							  })
+							  .catch(error => {
+								console.error("Error rejecting order:", error);
+								Swal.fire({
+								  icon: "error",
+								  title: "Error",
+								  text: "An unexpected error occurred. Please try again later.",
+								});
+							  });
+						  }
+						});
+					  
+						// Event listener for Accept Order button
+						acceptButton.addEventListener("click", function () {
+						  const orderId = acceptButton.getAttribute("data-order-id");
+						  if (orderId) {
+							fetch(`/restaurant/accept_order/${orderId}/`, {
+							  method: "POST",
+							  headers: {
+								"Content-Type": "application/json",
+								"X-CSRFToken": getCSRFToken(), // Include CSRF token if using Django
+							  },
+							})
+							  .then(response => {
+								if (response.ok) {
+								  Swal.fire({
+									icon: "success",
+									title: "Order Accepted",
+									text: "The order has been successfully accepted!",
+								  }).then(() => {
+									// Optionally update UI
+									hideOrderDetails();
+								  });
+								} else {
+								  Swal.fire({
+									icon: "error",
+									title: "Failed to Accept Order",
+									text: "There was an error accepting the order. Please try again.",
+								  });
+								}
+							  })
+							  .catch(error => {
+								console.error("Error accepting order:", error);
+								Swal.fire({
+								  icon: "error",
+								  title: "Error",
+								  text: "An unexpected error occurred. Please try again later.",
+								});
+							  });
+						  }
+						});
+					  
+						// Helper function to get CSRF token
+						function getCSRFToken() {
+						  const cookieValue = document.cookie
+							.split("; ")
+							.find(row => row.startsWith("csrftoken="))
+							?.split("=")[1];
+						  return cookieValue || "";
+						}
+					  
+						// Optionally hide the order details after an action
+						function hideOrderDetails() {
+						  const orderDetailsSection = document.getElementById("order-details-section");
+						  if (orderDetailsSection) {
+							orderDetailsSection.style.display = "none";
+						  }
+						}
+					  });
+					  
+					  
+				  </script>
+				  
             </div>
         </div>
         <!--**********************************

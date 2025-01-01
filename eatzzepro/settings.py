@@ -86,7 +86,7 @@ DATABASES = {
     }
 }
 
-# DATABASES["default"] = dj_database_url.parse("postgresql://postgres.jhqppvsthdfbgzzdbfuy:Ajay%40%40%40%40@aws-0-ap-south-1.pooler.supabase.com:6543/postgres")
+#DATABASES["default"] = dj_database_url.parse("postgresql://postgres:Ajay%40%40%40%40@db.jhqppvsthdfbgzzdbfuy.supabase.co:5432/postgres")
 
 
 

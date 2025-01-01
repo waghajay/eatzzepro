@@ -110,6 +110,17 @@ class restaurantOrderItem(models.Model):
     def __str__(self):
         return f"Order ID :- {self.id} ---- Menu Item :- {self.menu_item.name} ---- Quantity :- {self.quantity} ---- Price :- {self.price}"
     
+
+class restaurantOrderReview(models.Model):
+    order = models.ForeignKey(restaurantOrder, on_delete=models.CASCADE)
+    review_text = models.TextField(null=True, blank=True)
+    rating = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Order ID :- {self.order} --- Rating :- {self.rating}"
+    
+    
     
     
 
