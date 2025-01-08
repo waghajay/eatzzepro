@@ -14,16 +14,72 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
 
-# View for the restaurant login page
-@login_required(login_url="restaurant-login")
-def restauLogin(request):
-    return render(request, "restau_panel/restau_login.html")
-
-
 # View for the restaurant dashboard
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum, Count, F
+
 @login_required(login_url="restaurant-login")
 def restauDashboard(request):
-    return render(request, "restau_panel/dashboard.html")
+    # Get the logged-in restaurant user
+    restaurant_logged_in_user = request.user
+
+    try:
+        # Get the restaurant associated with the logged-in user
+        restaurant = RestaurantSubscription.objects.get(restaurant=restaurant_logged_in_user)
+
+        # Dashboard metrics
+        total_income = (
+            restaurantOrder.objects.filter(
+                restaurant=restaurant,
+                order_status="Accepted"
+            )
+            .aggregate(Sum('total_price'))['total_price__sum'] or 0
+        )
+    
+        total_orders = restaurantOrder.objects.filter(restaurant=restaurant).count()
+
+        total_order_accepted = restaurantOrder.objects.filter(
+            restaurant=restaurant, order_status="Accepted"
+        ).count()
+
+        total_order_rejected = restaurantOrder.objects.filter(
+            restaurant=restaurant, order_status="Rejected"
+        ).count()
+
+        total_order_pending = restaurantOrder.objects.filter(
+            restaurant=restaurant, order_status="Pending"
+        ).count()
+
+        # Popular food (top 3 ordered items)
+        popular_food = (
+            restaurantOrderItem.objects.filter(order__restaurant=restaurant)
+            .values(item_name=F('menu_item__name'))
+            .annotate(order_count=Count('menu_item'))
+            .order_by('-order_count')
+        )
+
+        # Prepare data for the template
+        popular_food_names = [item['item_name'] for item in popular_food]
+        popular_food_counts = [item['order_count'] for item in popular_food]
+
+        context = {
+            "total_income": total_income,
+            "total_orders": total_orders,
+            "total_order_accepted": total_order_accepted,
+            "total_order_rejected": total_order_rejected,
+            "total_order_pending": total_order_pending,
+            "popular_food_names": popular_food_names,
+            "popular_food_counts": popular_food_counts,
+        }
+
+        return render(request, "restau_panel/dashboard.html", context)
+
+    except RestaurantSubscription.DoesNotExist:
+        # Handle the case where the restaurant is not found
+        return render(request, "restau_panel/dashboard.html", {"error": "Restaurant data not found."})
+
+
 
 
 # View to display restaurant menu

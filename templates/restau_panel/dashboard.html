@@ -921,7 +921,7 @@
 											<div class="col-xl-12 col-lg-12 col-12">
 												<div class="line position-relative">
 													<p class="font-w500 mb-0">Total Income</p>
-													<h2 class="mb-0 text-primary">₹12,890,00</h2>
+													<h2 class="mb-0 text-primary">₹ {{ total_income }}/-</h2>
 												</div>
 											</div>
 										</div>
@@ -1022,11 +1022,11 @@
 												</svg>
 											</div>
 											<div>
-												<p class="font-w500 mb-0">Total Order Complete</p>
-												<h4 class="cate-title mb-0">2.678</h4>
+												<p class="font-w500 mb-0">Total Order Accepted</p>
+												<h4 class="cate-title mb-0">{{ total_order_accepted }}</h4>
 											</div>
 										</div>
-										<div class="d-flex align-items-center mb-4">
+										{% comment %} <div class="d-flex align-items-center mb-4">
 											<div class="icon-bx style-3 me-3">
 												<svg width="18" height="19" viewBox="0 0 18 19" fill="none"
 													xmlns="http://www.w3.org/2000/svg">
@@ -1042,7 +1042,7 @@
 												<p class="font-w500 mb-0">Total Order Delivered</p>
 												<h4 class="cate-title mb-0">1.234</h4>
 											</div>
-										</div>
+										</div> {% endcomment %}
 										<div class="d-flex align-items-center mb-4">
 											<div class="icon-bx style-3 me-3">
 												<svg width="18" height="19" viewBox="0 0 18 19" fill="none"
@@ -1056,8 +1056,8 @@
 												</svg>
 											</div>
 											<div>
-												<p class="font-w500 mb-0">Total Order Canceled</p>
-												<h4 class="cate-title mb-0">123</h4>
+												<p class="font-w500 mb-0">Total Order Rejected</p>
+												<h4 class="cate-title mb-0">{{ total_order_rejected }}</h4>
 											</div>
 										</div>
 										<div class="d-flex align-items-center mb-0">
@@ -1073,8 +1073,8 @@
 												</svg>
 											</div>
 											<div>
-												<p class="font-w500 mb-0">Order Pending</p>
-												<h4 class="cate-title mb-0">432</h4>
+												<p class="font-w500 mb-0">Total Order Pending</p>
+												<h4 class="cate-title mb-0">{{ total_order_pending }}</h4>
 											</div>
 										</div>
 									</div>
@@ -1110,32 +1110,70 @@
 												</div>
 											</div>
 										</div>
-										<div id="piechart"></div>
-										<h6 class="font-w700 mb-3">Legend</h6>
-										<div class="d-flex justify-content-between mb-2">
-											<span><svg class="me-2" width="16" height="16" viewBox="0 0 16 16"
-													fill="none" xmlns="http://www.w3.org/2000/svg">
-													<rect width="16" height="16" rx="4" fill="var(--primary)" />
-												</svg>
-												Asian Food (27%)</span>
-											<h6>763</h6>
-										</div>
-										<div class="d-flex justify-content-between mb-2">
-											<span><svg class="me-2" width="16" height="16" viewBox="0 0 16 16"
-													fill="none" xmlns="http://www.w3.org/2000/svg">
-													<rect width="16" height="16" rx="4" fill="#EB5757" />
-												</svg>
-												Fast Food (50%)</span>
-											<h6>763</h6>
-										</div>
-										<div class="d-flex justify-content-between mb-2">
-											<span><svg class="me-2" width="16" height="16" viewBox="0 0 16 16"
-													fill="none" xmlns="http://www.w3.org/2000/svg">
-													<rect width="16" height="16" rx="4" fill="#1FBF75" />
-												</svg>
-												Western Food (23%)</span>
-											<h6>69</h6>
-										</div>
+										<canvas id="popularFoodChart" width="400" height="400"></canvas>
+
+									{% for food in popular_food %}
+
+									<div class="d-flex justify-content-between mb-2">
+										<span><svg class="me-2" width="16" height="16" viewBox="0 0 16 16" fill="none"
+												xmlns="http://www.w3.org/2000/svg">
+												<rect width="16" height="16" rx="4" fill="var(--primary)" />
+											</svg>{{ food.item_name }}</span>
+										<h6>{{ food.order_count }}</h6>
+									</div>
+
+									{% endfor %}
+
+									<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+									<script>
+										// Get data from Django context
+										const popularFoodNames = {{ popular_food_names|safe }};
+										const popularFoodCounts = {{ popular_food_counts|safe }};
+
+										// Create the chart
+										const ctx = document.getElementById('popularFoodChart').getContext('2d');
+										const popularFoodChart = new Chart(ctx, {
+											type: 'doughnut', // Use 'pie' for a pie chart
+											data: {
+												labels: popularFoodNames,
+												datasets: [{
+													label: 'Popular Food',
+													data: popularFoodCounts,
+													backgroundColor: [
+														'#FF6F61', // Coral
+														'#6A5ACD', // Slate Blue
+														'#FFD700', // Gold
+														'#40E0D0', // Turquoise
+														'#FFA500', // Orange
+														'#32CD32'  // Lime Green
+													],
+													borderColor: [
+														'#FF6F61', // Coral
+														'#6A5ACD', // Slate Blue
+														'#FFD700', // Gold
+														'#40E0D0', // Turquoise
+														'#FFA500', // Orange
+														'#32CD32'  // Lime Green
+													],
+													borderWidth: 1
+												}]
+											},
+											options: {
+												responsive: true,
+												plugins: {
+													legend: {
+														position: 'top',
+													},
+													title: {
+														display: true,
+														text: 'Most Popular Food Items'
+													}
+												}
+											}
+										});
+									</script>
+
+
 									</div>
 								</div>
 							</div>
