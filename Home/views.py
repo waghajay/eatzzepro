@@ -313,6 +313,9 @@ from restau_panel.models import restaurantMenuItems, restaurantOrder, restaurant
 import json
 
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 def checkout(request):
     if request.method == 'POST':
         try:
@@ -326,29 +329,26 @@ def checkout(request):
             except (ValueError, TypeError):
                 return JsonResponse({'success': False, 'error': 'Invalid restaurant ID'}, status=400)
 
-            
             try:
-                restaurant = RestaurantSubscription.objects.get(id=restaurant_id)  
-                
+                restaurant = RestaurantSubscription.objects.get(id=restaurant_id)
             except RestaurantSubscription.DoesNotExist:
                 return JsonResponse({'success': False, 'error': 'Restaurant not found'}, status=404)
 
             if not items:
                 return JsonResponse({'success': False, 'error': 'No items provided'}, status=400)
-            
+
             try:
                 tableNumber = int(tableNumber)
             except (ValueError, TypeError):
                 return JsonResponse({'success': False, 'error': 'Invalid Table Number'}, status=400)
 
-            
             session_id = request.session.session_key
             if not session_id:
                 request.session.create()
                 session_id = request.session.session_key
 
             total_price = 0
-            order_items = [] 
+            order_items = []
 
             for item in items:
                 menu_item_id = item.get('menu_item_id')
@@ -362,18 +362,15 @@ def checkout(request):
 
                 total_price += quantity * price
 
-                
                 menu_item.order_times += quantity
                 menu_item.save()
 
-                
                 order_items.append({
                     'menu_item': menu_item,
                     'quantity': quantity,
                     'price': price
                 })
 
-           
             order = restaurantOrder.objects.create(
                 restaurant=restaurant,
                 table_Number=tableNumber,
@@ -381,7 +378,6 @@ def checkout(request):
                 total_price=total_price,
             )
 
-            # Save the items associated with this order
             for order_item in order_items:
                 restaurantOrderItem.objects.create(
                     order=order,
@@ -390,13 +386,23 @@ def checkout(request):
                     price=order_item['price']
                 )
 
+            # Send WebSocket notification
+            channel_layer = get_channel_layer()
+            message = f'New order for table {tableNumber}. Order ID: {order.id}'
+            async_to_sync(channel_layer.group_send)(
+                f'restaurant_{restaurant_id}_notifications',
+                {
+                    'type': 'send_notification',
+                    'message': message,
+                }
+            )
+
             return JsonResponse({'success': True, 'order_id': order.id})
 
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
-
 
 
 

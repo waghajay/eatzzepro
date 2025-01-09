@@ -1228,6 +1228,23 @@
 	<script src="{% static 'global/js/demo.js' %}"></script>
 	<script src="{% static 'global/js/styleSwitcher.js' %}"></script>
 
+
+	<div id="notification-container" style="position: fixed; top: 10px; right: 10px; z-index: 1000;"></div>
+
+
+
+	<script>
+		let restaurantId = {{ restaurant_id }}; // Replace with dynamic restaurant ID
+		let notifySocket = new WebSocket(`ws://127.0.0.1:8000/ws/restaurant/${restaurantId}/`);
+
+		notifySocket.onmessage = function (e) {
+			const data = JSON.parse(e.data);
+			console.log(data.message);
+			alert(data.message); // Display the notification
+		};
+
+	</script>
+
 </body>
 
 </html>

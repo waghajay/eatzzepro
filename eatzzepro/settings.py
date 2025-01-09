@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     
     'Home',
     'restau_panel',
+    "channels",
 ]
 
 MIDDLEWARE = [
@@ -73,7 +74,15 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'eatzzepro.wsgi.application'
+# WSGI_APPLICATION = 'eatzzepro.wsgi.application'
+
+ASGI_APPLICATION = 'eatzzepro.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    }
+}
 
 
 # Database

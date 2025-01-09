@@ -64,6 +64,7 @@ def restauDashboard(request):
         popular_food_counts = [item['order_count'] for item in popular_food]
 
         context = {
+            "restaurant_id" : restaurant.id,
             "total_income": total_income,
             "total_orders": total_orders,
             "total_order_accepted": total_order_accepted,
