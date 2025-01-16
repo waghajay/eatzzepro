@@ -225,6 +225,7 @@ def fetch_order_details(request, order_id):
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def accept_order(request, order_id):
     if request.method == "POST":
         try:
@@ -240,6 +241,8 @@ def accept_order(request, order_id):
             return JsonResponse({"success": False, "error": "An error occurred while accepting the order."})
     return JsonResponse({"success": False, "error": "Invalid request method."})
 
+
+@csrf_exempt
 def reject_order(request, order_id):
     if request.method == "POST":
         try:

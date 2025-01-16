@@ -315,7 +315,9 @@ import json
 
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from django.core.serializers.json import DjangoJSONEncoder
 
+@csrf_exempt
 def checkout(request):
     if request.method == 'POST':
         try:
@@ -366,7 +368,11 @@ def checkout(request):
                 menu_item.save()
 
                 order_items.append({
-                    'menu_item': menu_item,
+                    'menu_item': {
+                        'id': menu_item.id,
+                        'name': menu_item.name,
+                        'price': float(menu_item.price)
+                    },
                     'quantity': quantity,
                     'price': price
                 })
@@ -381,19 +387,24 @@ def checkout(request):
             for order_item in order_items:
                 restaurantOrderItem.objects.create(
                     order=order,
-                    menu_item=order_item['menu_item'],
+                    menu_item_id=order_item['menu_item']['id'],
                     quantity=order_item['quantity'],
                     price=order_item['price']
                 )
 
             # Send WebSocket notification
             channel_layer = get_channel_layer()
-            message = f'New order for table {tableNumber}. Order ID: {order.id}'
+            message = {
+                'table_number': tableNumber,
+                'order_id': order.id,
+                'total_price': float(total_price),
+                'items': order_items
+            }
             async_to_sync(channel_layer.group_send)(
                 f'restaurant_{restaurant_id}_notifications',
                 {
                     'type': 'send_notification',
-                    'message': message,
+                    'message': json.dumps(message, cls=DjangoJSONEncoder),
                 }
             )
 
@@ -403,7 +414,6 @@ def checkout(request):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
-
 
 
 

@@ -153,8 +153,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -173,3 +175,29 @@ DEFAULT_FROM_EMAIL = 'info@connectme.com'
 
 
 # daphne -p 8000 eatzzepro.asgi:application
+
+"""
+SESSION_COOKIE_SECURE = True  # Set to True for HTTPS-only sessions
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Strict'
+
+# CSRF settings
+CSRF_COOKIE_SECURE = True  # Set to True for HTTPS-only CSRF cookies
+CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = 'Strict'
+
+# Use session-based CSRF protection
+CSRF_USE_SESSIONS = True
+
+# X-Forwarded-Port header support for reverse proxy
+USE_X_FORWARDED_PORT = True
+
+# SSL header for reverse proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://www.fooddesk.store",
+    "https://fooddesk.store",
+    "https://13.232.118.65",
+]
+"""

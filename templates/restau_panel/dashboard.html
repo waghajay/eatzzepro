@@ -26,6 +26,8 @@
 	<link href="{% static 'global/vendor/bootstrap-select/dist/css/bootstrap-select.min.css' %}" rel="stylesheet">
 	<link href="{% static 'global/vendor/swiper/css/swiper-bundle.min.css' %}" rel="stylesheet">
 	<link href="{% static 'global/css/style.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 
 
 </head>
@@ -909,6 +911,13 @@
             Content body start
         ***********************************-->
 		<div class="content-body">
+			<div class="container mt-4">
+				<h2 class="text-center mb-4">Order Notifications</h2>
+				<div id="order-list" class="row gy-3">
+					<!-- Dynamic orders will be appended here -->
+				</div>
+			</div>
+			
 			<!-- row -->
 			<div class="container">
 				<div class="row">
@@ -1232,18 +1241,163 @@
 	<div id="notification-container" style="position: fixed; top: 10px; right: 10px; z-index: 1000;"></div>
 
 
-
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
+		let ws_scheme = window.location.protocol == "https:" ? "wss://" : "ws://";
 		let restaurantId = {{ restaurant_id }}; // Replace with dynamic restaurant ID
-		let notifySocket = new WebSocket(`ws://127.0.0.1:8000/ws/restaurant/${restaurantId}/`);
-
-		notifySocket.onmessage = function (e) {
-			const data = JSON.parse(e.data);
-			console.log(data.message);
-			alert(data.message); // Display the notification
+		let socketUrl = `${ws_scheme}${window.location.host}/ws/restaurant/${restaurantId}/`;
+		
+		let socket = new WebSocket(socketUrl);
+	
+		// Audio file for notification sound
+		const notificationSound = new Audio("{% static 'sounds/alert.wav' %}");
+	
+		// Flag to track user interaction
+		let userInteracted = false;
+	
+		// Event listener to detect user interaction (e.g., click anywhere)
+		document.body.addEventListener('click', function () {
+			userInteracted = true;
+		});
+	
+		socket.onopen = function () {
+			console.log('WebSocket connection established');
 		};
-
+	
+		socket.onerror = function (error) {
+			console.log('WebSocket Error: ', error);
+		};
+	
+		socket.onmessage = function (e) {
+			const data = JSON.parse(e.data);
+			const message = JSON.parse(data.message);
+	
+			// Play the notification sound only if there was user interaction
+			if (userInteracted) {
+				notificationSound.play();
+			}
+	
+			// Create Bootstrap card for the order
+			const orderCard = document.createElement('div');
+			orderCard.className = 'col-md-6 col-lg-4';
+			orderCard.id = `order-${message.order_id}`;
+	
+			let orderDetails = `
+				<div class="card shadow-sm border-light">
+					<div class="card-header bg-primary text-white">
+						<h5 class="mb-0">Order ID: ${message.order_id}</h5>
+					</div>
+					<div class="card-body">
+						<p><strong>Table Number:</strong> ${message.table_number}</p>
+						<p><strong>Total Price:</strong> ₹${message.total_price.toFixed(2)}</p>
+						<p><strong>Items:</strong></p>
+						<ul class="list-group mb-3">
+			`;
+	
+			message.items.forEach(item => {
+				orderDetails += `
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						${item.menu_item.name}
+						<span>Qty: ${item.quantity} | ₹${item.price.toFixed(2)}</span>
+					</li>
+				`;
+			});
+	
+			orderDetails += `
+						</ul>
+						<div class="d-flex justify-content-between">
+							<button class="btn btn-success btn-sm accept-btn" data-order-id="${message.order_id}">
+								Accept Order
+							</button>
+							<button class="btn btn-danger btn-sm reject-btn" data-order-id="${message.order_id}">
+								Reject Order
+							</button>
+						</div>
+					</div>
+				</div>
+			`;
+	
+			orderCard.innerHTML = orderDetails;
+	
+			// Append the order card to the order list
+			const orderList = document.getElementById('order-list');
+			orderList.appendChild(orderCard);
+	
+			// Add event listeners for Accept and Reject buttons
+			orderCard.querySelector('.accept-btn').addEventListener('click', () => handleOrderAction(message.order_id, 'accept'));
+			orderCard.querySelector('.reject-btn').addEventListener('click', () => handleOrderAction(message.order_id, 'reject'));
+		};
+	
+		socket.onclose = function () {
+			console.log('WebSocket connection closed');
+		};
+	
+		function handleOrderAction(orderId, action) {
+			const endpoint = action === 'accept' ? `/restaurant/accept_order/${orderId}/` : `/restaurant/reject_order/${orderId}/`;
+	
+			fetch(endpoint, {
+				method: 'POST',
+				headers: {
+					'X-CSRFToken': getCsrfToken(),
+					'Content-Type': 'application/json',
+				},
+			})
+				.then(response => {
+					if (!response.ok) {
+						throw new Error(`Failed to ${action} order`);
+					}
+					return response.json();
+				})
+				.then(data => {
+					if (data.success) {
+						const orderElement = document.getElementById(`order-${orderId}`);
+						orderElement.remove();
+	
+						// Show SweetAlert2 notification
+						Swal.fire({
+							icon: action === 'accept' ? 'success' : 'error',
+							title: `Order ${action === 'accept' ? 'Accepted' : 'Rejected'}`,
+							text: `Order ${orderId} has been ${action}ed successfully.`,
+							timer: 3000,
+							timerProgressBar: true,
+							showConfirmButton: false,
+						});
+					} else {
+						throw new Error(data.error || 'Unknown error occurred');
+					}
+				})
+				.catch(error => {
+					Swal.fire({
+						icon: 'error',
+						title: 'Error',
+						text: error.message,
+						timer: 3000,
+						timerProgressBar: true,
+						showConfirmButton: false,
+					});
+				});
+		}
+	
+		// Function to get CSRF token from cookies
+		function getCsrfToken() {
+			let csrfToken = null;
+			document.cookie.split(';').forEach(cookie => {
+				const [name, value] = cookie.split('=');
+				if (name.trim() === 'csrftoken') {
+					csrfToken = decodeURIComponent(value);
+				}
+			});
+			return csrfToken;
+		}
 	</script>
+	
+	
+	
+	
+	
+
+	
+
 
 </body>
 
