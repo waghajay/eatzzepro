@@ -176,7 +176,7 @@ DEFAULT_FROM_EMAIL = 'info@connectme.com'
 
 # daphne -p 8000 eatzzepro.asgi:application
 
-"""
+
 SESSION_COOKIE_SECURE = True  # Set to True for HTTPS-only sessions
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Strict'
@@ -200,4 +200,3 @@ CSRF_TRUSTED_ORIGINS = [
     "https://fooddesk.store",
     "https://13.232.118.65",
 ]
-"""

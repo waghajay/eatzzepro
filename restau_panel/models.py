@@ -51,8 +51,8 @@ class restaurantTable(models.Model):
         token = jwt.encode(table_data, settings.SECRET_KEY, algorithm='HS256')
 
         # Generate QR code with the encoded token
-        #external_url = f"https://eatzzepro.com/{self.restaurant.id}/menu/"  # Unique URL for each restaurant
-        external_url = f"http://127.0.0.1:8000/{self.restaurant.id}/menu/"  # Unique URL for each restaurant
+        external_url = f"https://fooddesk.store/{self.restaurant.id}/menu/"  # Unique URL for each restaurant
+        #external_url = f"http://127.0.0.1:8000/{self.restaurant.id}/menu/"  # Unique URL for each restaurant
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
