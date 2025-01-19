@@ -340,37 +340,41 @@ def submit_review(request, order_id):
 
     return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=405)
 
+# restaurant_name = get_restaurant_name(request=request)
+# "restaurant_name": restaurant_name
 
-# --- Tables Management ---
+
 class restauTables(View):
     template_name = 'restau_panel/tables.html'
 
     def get(self, request, *args, **kwargs):
-        restaurant_name = get_restaurant_name(request=request)
-        """Render the tables management page."""
-        try:
-            restaurant = RestaurantSubscription.objects.get(restaurant=request.user)
-            tables = restaurantTable.objects.filter(restaurant=restaurant).order_by('number')
-            return render(request, self.template_name, {"tables": tables, "restaurant": restaurant,"restaurant_name": restaurant_name})
-        except RestaurantSubscription.DoesNotExist:
-            return render(request, self.template_name, {"error": "Restaurant not found.","restaurant_name": restaurant_name})
+        # Fetch the logged-in user's restaurant
+        restaurant = RestaurantSubscription.objects.get(restaurant=request.user)
+        tables = restaurantTable.objects.filter(restaurant=restaurant).order_by('number')  # Fetch tables for the logged-in restaurant
+        return render(request, self.template_name, {"tables": tables, "restaurant": restaurant})
 
     def post(self, request, *args, **kwargs):
-        """Add a new table."""
-        table_number = request.POST.get('table_number')
-        try:
+        if request.method == "POST":
+            table_number = request.POST.get('table_number')
+
+            # Fetch the logged-in user's restaurant
             restaurant = RestaurantSubscription.objects.get(restaurant=request.user)
-            if table_number and not restaurantTable.objects.filter(restaurant=restaurant, number=int(table_number)).exists():
-                restaurantTable.objects.create(restaurant=restaurant, number=int(table_number))
-                messages.success(request, 'Table created successfully.')
-                return redirect("restau-tables")
 
-            messages.error(request, 'Invalid table number or table already exists.')
-        except Exception as e:
-            print(f"Error adding table: {str(e)}")
+            if table_number:
+                table_number = int(table_number)
 
-        return redirect("restau-tables")
+                # Check if table already exists for the logged-in restaurant
+                if not restaurantTable.objects.filter(restaurant=restaurant, number=table_number).exists():
+                    # Create a new table instance for the restaurant
+                    table = restaurantTable(restaurant=restaurant, number=table_number)
+                    table.save()
+                    messages.success(request, 'Table created successfully.')
+                    return redirect("restau-tables")
 
+            # Error or table already exists, show error message
+            tables = restaurantTable.objects.filter(restaurant=restaurant)
+            messages.error(request, 'Invalid request or table number already exists.')
+            return render(request, self.template_name, {"tables": tables, "restaurant": restaurant})
 
 # --- QR Code PDF Generation ---
 @login_required(login_url="restaurant-login")

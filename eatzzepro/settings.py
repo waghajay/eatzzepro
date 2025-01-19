@@ -104,15 +104,16 @@ DATABASES = {
 
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'eatzzepro',       
-#         'USER': 'root',           
-#         'PASSWORD': '',               
-#         'PORT': '3306',         
-#     }js
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'postgres.crsa64q6owas.ap-south-1.rds.amazonaws.com',
+        'PORT': '5432',
+    }
+}
 
 
 
