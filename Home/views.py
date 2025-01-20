@@ -324,31 +324,42 @@ def checkout(request):
             data = json.loads(request.body)
             items = data.get('items', [])
             restaurant_id = data.get('restaurant_id')
-            tableNumber = data.get('table_Number')
+            table_number = data.get('table_Number')
+            username = data.get('username', '').strip()  # Get and trim the username
+            
+            # Validate username
+            if not username:
+                return JsonResponse({'success': False, 'error': 'Username is required'}, status=400)
 
+            # Validate restaurant_id
             try:
                 restaurant_id = int(restaurant_id)
             except (ValueError, TypeError):
                 return JsonResponse({'success': False, 'error': 'Invalid restaurant ID'}, status=400)
 
+            # Check if the restaurant exists
             try:
                 restaurant = RestaurantSubscription.objects.get(id=restaurant_id)
             except RestaurantSubscription.DoesNotExist:
                 return JsonResponse({'success': False, 'error': 'Restaurant not found'}, status=404)
 
+            # Check if items are provided
             if not items:
                 return JsonResponse({'success': False, 'error': 'No items provided'}, status=400)
 
+            # Validate table number
             try:
-                tableNumber = int(tableNumber)
+                table_number = int(table_number)
             except (ValueError, TypeError):
                 return JsonResponse({'success': False, 'error': 'Invalid Table Number'}, status=400)
 
+            # Ensure session exists
             session_id = request.session.session_key
             if not session_id:
                 request.session.create()
                 session_id = request.session.session_key
 
+            # Calculate total price and prepare order items
             total_price = 0
             order_items = []
 
@@ -377,13 +388,16 @@ def checkout(request):
                     'price': price
                 })
 
+            # Create the order
             order = restaurantOrder.objects.create(
                 restaurant=restaurant,
-                table_Number=tableNumber,
+                table_Number=table_number,
                 session_id=session_id,
                 total_price=total_price,
+                username=username  # Store the username
             )
 
+            # Create order items
             for order_item in order_items:
                 restaurantOrderItem.objects.create(
                     order=order,
@@ -395,10 +409,11 @@ def checkout(request):
             # Send WebSocket notification
             channel_layer = get_channel_layer()
             message = {
-                'table_number': tableNumber,
+                'table_number': table_number,
                 'order_id': order.id,
                 'total_price': float(total_price),
-                'items': order_items
+                'items': order_items,
+                'username': username  # Include username in the notification
             }
             async_to_sync(channel_layer.group_send)(
                 f'restaurant_{restaurant_id}_notifications',
@@ -414,7 +429,6 @@ def checkout(request):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
-
 
 
 

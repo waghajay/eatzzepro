@@ -253,6 +253,7 @@ def fetch_order_details(request, order_id):
     order_data = {
         "id": order.id,
         "table_number": order.table_Number,
+        "username" : order.username,
         "created_at": order.created_at.strftime("%B %d, %Y, %I:%M %p"),
         "total_price": float(order.total_price),
         "status": order.order_status,

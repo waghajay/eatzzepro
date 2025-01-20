@@ -28,6 +28,53 @@
     <!-- Global Stylesheet -->
     <link href="{% static 'global/css/style.css' %}" rel="stylesheet">
   </head>
+  <style>
+    .quantity {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px; /* Adds space between buttons and input */
+    }
+  
+    .quantity input.quantity-input {
+      width: 50px; /* Ensures the input box has enough space */
+      text-align: center; /* Centers the text */
+      border: 1px solid #ccc; /* Adds a subtle border */
+      border-radius: 5px; /* Rounded corners */
+      padding: 5px; /* Adds padding for a cleaner look */
+      background-color: #f8f9fa; /* Light background */
+      font-size: 16px; /* Matches button text size */
+    }
+  
+    .btn-quantity {
+      width: 30px;
+      height: 30px;
+      font-size: 20px; /* Makes the +/- symbols prominent */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #ccc; /* Matches the input border */
+      border-radius: 50%; /* Circular buttons */
+      background-color: #fff; /* White background */
+      color: #FF0000; /* Button text color */
+      cursor: pointer;
+      transition: all 0.3s ease; /* Smooth hover effects */
+    }
+  
+    .btn-quantity:hover {
+      background-color: #FF0000; /* Blue background on hover */
+      color: #fff; /* White text on hover */
+      border-color: #FF0000; /* Matches background color */
+    }
+  
+    .decrease-btn {
+      margin-right: 5px; /* Space between decrease button and input */
+    }
+  
+    .increase-btn {
+      margin-left: 5px; /* Space between input and increase button */
+    }
+  </style>
   <body>
     <!--*******************
         Preloader start
@@ -120,6 +167,23 @@
                 <h4 style="text-align: center;margin-top: 15px;" >Table :- {{ table_number }}</h4>
               <div class="row">
                 <div class="col-xl-12">
+                  <div class="mt-4">
+                    <label for="username" class="form-label fs-5 fw-semibold text-primary">
+                        Enter Your Name:
+                    </label>
+                    <div class="input-group mt-2">
+                        <span class="input-group-text bg-primary text-white border-0">
+                            <i class="bi bi-person-fill"></i>
+                        </span>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            class="form-control border-primary rounded-end" 
+                            placeholder="Your Name" 
+                            required 
+                        />
+                    </div>
+                </div>
                   <div class="d-flex align-items-center justify-content-between mb-2 gap">
                     <h4 class=" mb-0 cate-title">Category</h4>
                     </a>
@@ -174,53 +238,6 @@
                                 <input type="text" class="quantity-input" value="0" data-price="{{ item.price }}" data-item-id="{{ item.id }}" readonly />
                                 <button class="btn-quantity increase-btn" data-action="increase" data-price="{{ item.price }}">+</button>
                               </div>
-                              <style>
-                                .quantity {
-                                  display: flex;
-                                  align-items: center;
-                                  justify-content: center;
-                                  gap: 5px; /* Adds space between buttons and input */
-                                }
-                              
-                                .quantity input.quantity-input {
-                                  width: 50px; /* Ensures the input box has enough space */
-                                  text-align: center; /* Centers the text */
-                                  border: 1px solid #ccc; /* Adds a subtle border */
-                                  border-radius: 5px; /* Rounded corners */
-                                  padding: 5px; /* Adds padding for a cleaner look */
-                                  background-color: #f8f9fa; /* Light background */
-                                  font-size: 16px; /* Matches button text size */
-                                }
-                              
-                                .btn-quantity {
-                                  width: 30px;
-                                  height: 30px;
-                                  font-size: 20px; /* Makes the +/- symbols prominent */
-                                  display: flex;
-                                  align-items: center;
-                                  justify-content: center;
-                                  border: 1px solid #ccc; /* Matches the input border */
-                                  border-radius: 50%; /* Circular buttons */
-                                  background-color: #fff; /* White background */
-                                  color: #FF0000; /* Button text color */
-                                  cursor: pointer;
-                                  transition: all 0.3s ease; /* Smooth hover effects */
-                                }
-                              
-                                .btn-quantity:hover {
-                                  background-color: #FF0000; /* Blue background on hover */
-                                  color: #fff; /* White text on hover */
-                                  border-color: #FF0000; /* Matches background color */
-                                }
-                              
-                                .decrease-btn {
-                                  margin-right: 5px; /* Space between decrease button and input */
-                                }
-                              
-                                .increase-btn {
-                                  margin-left: 5px; /* Space between input and increase button */
-                                }
-                              </style>
                               
                             </div>
                           </div>
@@ -236,100 +253,112 @@
                         <h4 class="font-w500">Total</h4>
                         <h3 class="font-w500 text-primary">₹202.00</h3>
                       </div>
-                      <a href="" class="btn btn-primary btn-block checkout-btn">Checkout</a>
+                      <a class="btn btn-primary btn-block checkout-btn">Checkout</a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+      </div>
 
-        <div id="restaurant-info" data-restaurant-id="{{ restaurant_id }}"></div>
-        <div id="table-info" data-table-Number="{{ table_number }}"></div>
+      <div id="restaurant-info" data-restaurant-id="{{ restaurant_id }}"></div>
+      <div id="table-info" data-table-Number="{{ table_number }}"></div>
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-          document.querySelector('.checkout-btn').addEventListener('click', function (event) {
-            event.preventDefault(); // Prevent form submission or page refresh
-        
-            const items = [];
-            const quantityInputs = document.querySelectorAll('.quantity-input');
-        
-            // Get the restaurant ID from the data attribute
-            const restaurantInfo = document.getElementById('restaurant-info');
-            const tableInfo = document.getElementById('table-info');
-            const restaurantId = restaurantInfo ? restaurantInfo.dataset.restaurantId : null;
-            const tableNumber = tableInfo ? tableInfo.dataset.tableNumber : null;
-            console.log(tableNumber);
-        
-            quantityInputs.forEach(input => {
-                const quantity = parseInt(input.value);
-                if (quantity > 0) {
-                    items.push({
-                        menu_item_id: input.dataset.itemId,
-                        quantity: quantity,
-                        price: parseFloat(input.dataset.price)
-                    });
-                }
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script>
+        document.querySelector('.checkout-btn').addEventListener('click', function (event) {
+          event.preventDefault(); // Prevent form submission or page refresh
+      
+          const items = [];
+          const quantityInputs = document.querySelectorAll('.quantity-input');
+          const usernameInput = document.getElementById('username'); // Get the username input field
+          const username = usernameInput.value.trim(); // Trim whitespace from the input
+      
+          // Get the restaurant ID and table number
+          const restaurantInfo = document.getElementById('restaurant-info');
+          const tableInfo = document.getElementById('table-info');
+          const restaurantId = restaurantInfo ? restaurantInfo.dataset.restaurantId : null;
+          const tableNumber = tableInfo ? tableInfo.dataset.tableNumber : null;
+      
+          if (!username) {
+            // Alert user if the username is empty
+            Swal.fire({
+              title: 'Name Required',
+              text: 'Please enter your name to proceed with the checkout.',
+              icon: 'warning',
+              confirmButtonText: 'OK'
             });
-        
-            if (items.length > 0 && restaurantId) {
-                fetch('/checkout/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}' // Add CSRF token for security
-                    },
-                    body: JSON.stringify({
-                        items: items,
-                        restaurant_id: restaurantId, // Include restaurant_id in the payload
-                        table_Number : tableNumber
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire({
-                            title: 'Order Placed!',
-                            text: 'Redirecting to your order history...',
-                            icon: 'success',
-                            timer: 2000,
-                            showConfirmButton: false
-                        }).then(() => {
-                            window.location.href = '/order-history/';
-                        });
-                    } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: data.error || 'Failed to place the order. Please try again.',
-                            icon: 'error',
-                            confirmButtonText: 'Retry'
-                        });
-                    }
-                })
-                .catch(error => {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'An error occurred. Please try again later.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                });
-            } else {
-                Swal.fire({
-                    title: 'No Items Selected',
-                    text: 'Please add at least one item to proceed.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                });
+            return;
+          }
+      
+          quantityInputs.forEach(input => {
+            const quantity = parseInt(input.value);
+            if (quantity > 0) {
+              items.push({
+                menu_item_id: input.dataset.itemId,
+                quantity: quantity,
+                price: parseFloat(input.dataset.price)
+              });
             }
+          });
+      
+          if (items.length > 0 && restaurantId) {
+            fetch('/checkout/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}' // Add CSRF token for security
+              },
+              body: JSON.stringify({
+                items: items,
+                restaurant_id: restaurantId,
+                table_Number: tableNumber,
+                username: username // Include the username in the payload
+              })
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  Swal.fire({
+                    title: 'Order Placed!',
+                    text: 'Redirecting to your order history...',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                  }).then(() => {
+                    window.location.href = '/order-history/';
+                  });
+                } else {
+                  Swal.fire({
+                    title: 'Error',
+                    text: data.error || 'Failed to place the order. Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'Retry'
+                  });
+                }
+              })
+              .catch(error => {
+                Swal.fire({
+                  title: 'Error',
+                  text: 'An error occurred. Please try again later.',
+                  icon: 'error',
+                  confirmButtonText: 'OK'
+                });
+              });
+          } else {
+            Swal.fire({
+              title: 'No Items Selected',
+              text: 'Please add at least one item to proceed.',
+              icon: 'warning',
+              confirmButtonText: 'OK'
+            });
+          }
         });
-        
-        </script>
+      </script>
         
 
-        <script>
+      <script>
             document.addEventListener("DOMContentLoaded", () => {
               const quantityButtons = document.querySelectorAll(".btn-quantity");
               const quantityInputs = document.querySelectorAll(".quantity-input");
@@ -365,12 +394,13 @@
               // Initial total calculation on page load
               calculateTotal();
             });
-        </script>
+      </script>
           
           
       
-        </div>
-      <!-- Button trigger modal -->
+      </div>
+     
+        <!-- Button trigger modal -->
       <!--**********************************
             Content body end
         ***********************************-->

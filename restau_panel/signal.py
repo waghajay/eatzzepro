@@ -11,8 +11,13 @@ def send_order_notification(sender, instance, created, **kwargs):
         table_number = instance.table_Number
         order_id = instance.id
         total_price = instance.total_price
+        username = instance.username  # Get the username from the order
 
-        message = f'New order received! Table {table_number}, Order ID: {order_id}, Total: {total_price}'
+        # Include the username in the message
+        message = (
+            f"New order received from {username}! "
+            f"Table {table_number}, Order ID: {order_id}, Total: {total_price}"
+        )
 
         channel_layer = get_channel_layer()
         async_to_sync(channel_layer.group_send)(

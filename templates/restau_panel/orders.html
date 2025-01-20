@@ -289,6 +289,7 @@
 								<div class="d-flex align-items-center justify-content-between border-bottom flex-wrap">
 								  <div class="mb-4">
 									<h4 class="font-w500">Table Number : ${data.table_number}</h4>
+									<h5 class="font-w500">Customer Name : ${data.username}</h5>
 									<h5 class="font-w500">Order ID : ${data.id}</h5>
 									<h5 class="font-w500">Order Status : <u style="font-size:17px">${data.status}</u></h5>
 									<span>${data.created_at}</span>
@@ -312,6 +313,12 @@
 				  
 							  // Show the order details section
 							  orderDetailsSection.style.display = "block";
+
+							// Scroll to the top of the page
+								window.scrollTo({
+									top: 0,
+									behavior: 'smooth'
+								});
 							})
 							.catch(error => {
 							  console.error("Error fetching order details:", error);
