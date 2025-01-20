@@ -1,240 +1,1030 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EatzzePro - Simplify Restaurant Management</title>
-    <link rel="shortcut icon" href="{% static 'global/images/favicon.png' %}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'global/css/index.css' %}">
-
-</head>
-<body>
-    <!-- Header Section -->
-    <header class="header" id="header">
-        <div class="container">
-            <h1>EatzzePro</h1>
-            <p>Simplify your restaurant operations with our SaaS platform.</p>
-            <a href="#pricing" class="cta-button">Get Started</a>
-        </div>
-    </header>
-
-    <!-- Pricing Section -->
-    <section class="pricing" id="pricing">
-        <div class="container">
-            <h2 class="pricing-title">Choose Your Subscription Plan</h2>
-            <p class="pricing-subtitle">Flexible plans designed to suit your restaurant's needs.</p>
-            <div class="pricing-tiers">
-                <div class="tier" id="one-month">
-                    <h3>1 Month</h3>
-                    <p class="price">₹99</p>
-                    <ul>
-                        <li><i class="check-icon">✔</i> Full access to all features</li>
-                        <li><i class="check-icon">✔</i> QR code generation</li>
-                        <li><i class="check-icon">✔</i> Menu management</li>
-                    </ul>
-                    <button class="cta-button" onclick="showForm('1 Month', 99)">Subscribe for 1 Month</button>
-                </div>
-                <div class="tier highlighted" id="two-months">
-                    <h3>2 Months</h3>
-                    <p class="price">₹179</p>
-                    <ul>
-                        <li><i class="check-icon">✔</i> Full access to all features</li>
-                        <li><i class="check-icon">✔</i> QR code generation</li>
-                        <li><i class="check-icon">✔</i> Menu management</li>
-                    </ul>
-                    <button class="cta-button" onclick="showForm('2 Months', 179)">Subscribe for 2 Months</button>
-                </div>
-                <div class="tier" id="three-months">
-                    <h3>3 Months</h3>
-                    <p class="price">₹299</p>
-                    <ul>
-                        <li><i class="check-icon">✔</i> Full access to all features</li>
-                        <li><i class="check-icon">✔</i> QR code generation</li>
-                        <li><i class="check-icon">✔</i> Menu management</li>
-                    </ul>
-                    <button class="cta-button" onclick="showForm('3 Months', 299)">Subscribe for 3 Months</button>
-                </div>
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>eatZzepro | QR Code Menu & Contactless Ordering for Restaurants</title>
+      
+      <!-- Primary Meta Tags -->
+      <meta name="title" content="eatZzepro | QR Code Menu & Contactless Ordering for Restaurants" />
+      <meta
+        name="description"
+        content="Boost your restaurant's efficiency with eatZzepro, a QR code menu and contactless ordering system. Simplify operations, improve customer satisfaction, and grow your business with our scalable SaaS platform."
+      />
+      <meta name="keywords" content="QR code menu, contactless ordering, restaurant management, SaaS for restaurants, QR code ordering system, restaurant technology, menu digitization" />
+      <meta name="author" content="eatZzepro Team" />
+      
+      <!-- Open Graph / Facebook -->
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://eatzzepro.com/" />
+      <meta property="og:title" content="eatZzepro | QR Code Menu & Contactless Ordering for Restaurants" />
+      <meta
+        property="og:description"
+        content="Boost your restaurant's efficiency with eatZzepro, a QR code menu and contactless ordering system. Simplify operations, improve customer satisfaction, and grow your business with our scalable SaaS platform."
+      />
+      <meta property="og:image" content="https://eatzzepro.com/path-to-image.jpg" />
+      
+      <!-- Twitter -->
+      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:url" content="https://eatzzepro.com/" />
+      <meta property="twitter:title" content="eatZzepro | QR Code Menu & Contactless Ordering for Restaurants" />
+      <meta
+        property="twitter:description"
+        content="Boost your restaurant's efficiency with eatZzepro, a QR code menu and contactless ordering system. Simplify operations, improve customer satisfaction, and grow your business with our scalable SaaS platform."
+      />
+      <meta property="twitter:image" content="https://eatzzepro.com/path-to-image.jpg" />
+      
+      <!-- Additional SEO Enhancements -->
+      <link rel="canonical" href="https://eatzzepro.com/" />
+      <meta name="robots" content="index, follow" />
+      <link rel="icon" href="favicon.ico">
+      <link href="{% static 'Home/css/style.css' %}" rel="stylesheet">
+  </head>
+ 
+   <body style="background-color: #f7f7f7;">
+      <!-- ====== Navbar Section Start -->
+      <!-- Navbar Section Start -->
+      <header class="header bg-transparent absolute top-0 left-0 z-40 w-full flex items-center transition">
+         <div class="container">
+            <div class="flex mx-[-16px] items-center justify-between relative">
+               <div class="px-4 w-60 max-w-full">
+                  <a href="#" class="header-logo w-full block">
+                  <img src="{% static 'Home/images/eatzze-logo.png' %}" alt="logo" class="w-full" style="width: 80px;" />
+                  </a>
+               </div>
+               <div class="flex px-4 items-center w-full" style="justify-content: space-around;">
+                  <!-- Navbar Toggler -->
+                  <button
+                     id="navbarToggler"
+                     class="block absolute right-4 top-1/2 translate-y-[-50%] lg:hidden focus:ring-2 ring-primary px-3 py-[6px] rounded-lg"
+                     >
+                  <span class="relative w-[30px] h-[2px] my-[6px] block bg-dark"></span>
+                  <span class="relative w-[30px] h-[2px] my-[6px] block bg-dark"></span>
+                  <span class="relative w-[30px] h-[2px] my-[6px] block bg-dark"></span>
+                  </button>
+                  <!-- Navbar Collapse -->
+                  <nav
+                     id="navbarCollapse"
+                     class="absolute py-5 lg:py-0 lg:px-4 xl:px-6 bg-white lg:bg-transparent shadow-lg rounded-lg max-w-[250px] w-full lg:max-w-full lg:w-full right-4 top-full hidden lg:block lg:static lg:shadow-none"
+                     >
+                     <ul class="block lg:flex">
+                        <li class="relative group">
+                           <a href="#home" class="menu-scroll text-base text-black group-hover:text-primary py-2 lg:py-6 lg:inline-flex lg:px-0 flex mx-8 lg:mr-0"> Home </a>
+                        </li>
+                        <li class="relative group">
+                           <a
+                              href="#features"
+                              class="menu-scroll text-base text-black group-hover:text-primary py-2 lg:py-6 lg:inline-flex lg:px-0 flex mx-8 lg:mr-0 lg:ml-8 xl:ml-12"
+                              >
+                           Features
+                           </a>
+                        </li>
+                        <li class="relative group">
+                           <a
+                              href="#pricing"
+                              class="menu-scroll text-base text-black group-hover:text-primary py-2 lg:py-6 lg:inline-flex lg:px-0 flex mx-8 lg:mr-0 lg:ml-8 xl:ml-12"
+                              >
+                           Pricing
+                           </a>
+                        </li>
+                        <li class="relative group">
+                           <a
+                              href="#contact"
+                              class="menu-scroll text-base text-black group-hover:text-primary py-2 lg:py-6 lg:inline-flex lg:px-0 flex mx-8 lg:mr-0 lg:ml-8 xl:ml-12"
+                              >
+                           Support
+                           </a>
+                        </li>
+                     </ul>
+                     <!-- Sign In/Sign Up Buttons for Small Devices -->
+                     <div class="block lg:hidden mt-4">
+                        <a href="signin.html" class="text-base font-semibold text-body-color hover:text-primary py-3 px-7 transition block"> Login </a>
+                        <a
+                           href="signup.html"
+                           class="text-base font-bold text-white py-3 px-8 md:px-9 lg:px-8 xl:px-9 hover:shadow-signUp rounded-sm transition ease-in-out duration-300 block mt-2"
+                           style="background-color: #ff6f61;"
+                           >
+                        Create Account
+                        </a>
+                     </div>
+                  </nav>
+                  <!-- Sign In/Sign Up Buttons for Larger Devices -->
+                  <div class="sm:flex justify-end hidden pr-16 lg:pr-0">
+                     <a href="signin.html" class="text-base font-semibold text-body-color hover:text-primary py-3 px-7 transition"> Login </a>
+                     <a
+                        href="signup.html"
+                        class="text-base font-bold text-white py-3 px-8 md:px-9 lg:px-8 xl:px-9 hover:shadow-signUp rounded-sm transition ease-in-out duration-300"
+                        style="background-color: #ff6f61;"
+                        >
+                     Register
+                     </a>
+                  </div>
+               </div>
             </div>
-        </div>
-    </section>
-
-    <section class="confirmation" id="confirmation-form" style="display: none;">
-        <div class="container">
-            <h2>Confirm Your Subscription</h2>
-            <div class="subscription-summary">
-                <h3>Selected Plan: <span id="selected-plan">None</span></h3>
-                <p>Price: ₹<span id="selected-price">0</span></p>
-                <p>Includes full access to all features, QR code generation, and menu management.</p>
+         </div>
+      </header>
+      <!-- Navbar Section End -->
+      <!-- ====== Navbar Section End -->
+      <!-- ====== Hero Section Start -->
+      <section id="home" class="relative overflow-hidden z-10 pt-[120px] pb-16 md:pt-[150px] xl:pt-[180px]">
+         <div class="container">
+            <div class="flex flex-wrap mx-[-16px]">
+               <div class="w-full px-4">
+                  <div class="mx-auto max-w-[720px] text-center wow fadeInUp" data-wow-delay=".2s">
+                     <h1 class="text-black font-bold text-3xl sm:text-4xl md:text-5xl leading-tight sm:leading-tight md:leading-tight mb-5">
+                        Revolutionize Your Restaurant with eatZzepro
+                     </h1>
+                     <p class="font-medium text-lg md:text-xl leading-relaxed md:leading-relaxed text-body-color opacity-90 mb-12">
+                        eatZzepro offers a smart, all-in-one solution to streamline your restaurant's operations. Easily manage menus, generate table-specific QR codes, and provide a seamless, contactless ordering experience for your customers.
+                     </p>
+                     <div class="flex items-center justify-center">
+                        <a
+                           href="#features"
+                           class="menu-scroll text-base font-semibold text-white bg-primary py-4 px-7 hover:shadow-signUp mx-2 rounded-sm transition ease-in-out duration-300" style="background-color:#ff6f61;"
+                           >
+                        Discover Our Features
+                        </a>
+                     </div>
+                  </div>
+               </div>
             </div>
-    
-            <!-- Registration Form -->
-            <div class="form-card">
-                <h3>Enter Your Details to Complete Registration</h3>
-                <form id="subscription-form" class="registration-form">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="restaurant-name">Restaurant Name:</label>
-                        <input type="text" id="restaurant-name" name="restaurant_name" placeholder="Your Restaurant Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="owner-name">Owner Name:</label>
-                        <input type="text" id="owner-name" name="owner_name" placeholder="Owner Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone-number">Phone Number:</label>
-                        <input type="number" id="phone-number" name="phone_number" placeholder="Phone Number" required>
-                        <small id="phone-error" class="error-message" style="display: none; color: red;">Please enter a valid 10-digit phone number.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address:</label>
-                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
-                        <small id="email-error" class="error-message" style="display: none; color: red;">Please enter a valid email address.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" placeholder="Choose a password" required>
-                        <small id="password-error" class="error-message" style="display: none; color: red;">Password must be at least 8 characters, include 1 uppercase letter, 1 lowercase letter, and 1 number.</small>
-                    </div>
-                    <div class="final-confirmation">
-                        <button type="submit" class="cta-button">Submit</button>
-                    </div>
-                </form>
-                
-                
+         </div>
+         <div class="absolute right-0 top-24 z-[-1]">
+            <svg width="111" height="176" viewBox="0 0 111 176" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M87.9999 176C136.614 176 176 136.602 176 88C176 39.3978 136.614 0 87.9999 0C39.4096 0 -0.00012207 39.3978 -0.00012207 88C-0.00012207 136.602 39.4096 176 87.9999 176Z"
+                  fill="url(#paint0_radial_2:29)"
+                  />
+               <defs>
+                  <radialGradient id="paint0_radial_2:29" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(87.9999) rotate(90) scale(176)">
+                     <stop stop-color="white" />
+                     <stop offset="0.569" stop-color="#F0F4FD" />
+                     <stop offset="0.993" stop-color="#D9E0F0" />
+                  </radialGradient>
+               </defs>
+            </svg>
+         </div>
+         <div class="absolute left-0 bottom-0 z-[-1]">
+            <svg width="731" height="1028" viewBox="0 0 731 1028" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M341.5 630C366.624 630 387 610.077 387 585.5C387 560.923 366.624 541 341.5 541C316.375 541 296 560.923 296 585.5C296 610.077 316.375 630 341.5 630Z"
+                  fill="#FFDDF7"
+                  />
+               <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M325.845 560.409C325.305 555.541 323.685 550.779 321.165 546.532C318.605 542.26 315.191 538.563 311.136 535.672C310.956 535.541 310.776 535.4 310.583 535.276L310.017 534.903C309.632 534.656 309.259 534.396 308.873 534.174C308.475 533.944 308.089 533.71 307.69 533.485L306.482 532.85C304.85 532.033 303.161 531.336 301.429 530.764C299.682 530.212 297.899 529.779 296.093 529.471C294.28 529.19 292.441 529.034 290.603 529C288.777 528.996 286.938 529.104 285.113 529.35C283.287 529.617 281.487 530.007 279.713 530.522C277.951 531.059 276.228 531.722 274.557 532.501C272.893 533.292 271.291 534.205 269.761 535.231C269.35 535.523 268.925 535.795 268.514 536.102L267.318 537.024L266.148 538.003C265.762 538.334 265.402 538.687 265.029 539.029C263.567 540.431 262.221 541.949 261.005 543.57C260.722 543.982 260.414 544.385 260.131 544.805L259.295 546.077L258.524 547.386C258.279 547.822 258.061 548.279 257.816 548.725C256.904 550.531 256.147 552.411 255.553 554.345C252.789 563.241 253.766 573.14 258.061 581.377C258.729 582.694 259.514 583.944 260.324 585.168L260.979 586.064L261.301 586.511L261.648 586.943L262.342 587.806C262.574 588.089 262.818 588.361 263.062 588.639C263.538 589.202 264.065 589.72 264.579 590.253C264.837 590.523 265.107 590.763 265.377 591.019C265.647 591.27 265.904 591.532 266.187 591.771C266.752 592.247 267.305 592.747 267.897 593.189L268.771 593.871L269.671 594.514C270.224 594.925 270.815 595.275 271.394 595.65C271.677 595.842 271.985 596.001 272.281 596.175L273.181 596.685L274.107 597.152C274.415 597.305 274.724 597.469 275.045 597.603C275.675 597.877 276.292 598.179 276.948 598.414C279.52 599.426 282.194 600.146 284.92 600.574C285.37 600.64 285.807 600.689 286.257 600.747C286.475 600.772 286.694 600.806 286.926 600.826L287.594 600.877C288.031 600.905 288.481 600.954 288.931 600.964L290.268 600.995C290.487 601.004 290.718 601 290.937 600.991L291.606 600.973C292.056 600.96 292.493 600.954 292.943 600.91L294.28 600.803L295.604 600.63C297.366 600.367 299.127 600.011 300.824 599.482C302.534 598.962 304.206 598.345 305.8 597.57C309.872 595.647 313.535 592.956 316.588 589.645C319.572 586.407 321.903 582.623 323.453 578.501C324.148 576.652 324.713 574.737 325.125 572.797C325.51 570.858 325.768 568.891 325.768 566.952C325.78 566.764 325.78 566.588 325.768 566.427L325.729 565.982C325.713 565.764 325.683 565.547 325.639 565.332C325.549 564.999 325.433 564.669 325.287 564.347L325.845 560.409Z"
+                  fill="#C0FFFC"
+                  />
+            </svg>
+         </div>
+      </section>
+      <!-- ====== Hero Section End -->
+      <!-- ====== Features Section Start -->
+      <section id="features" class="pt-[100px]">
+         <div class="container">
+            <div class="flex flex-wrap mx-[-16px]">
+               <div class="w-full px-4">
+                  <div class="mx-auto max-w-[655px] text-center mb-20 wow fadeInUp" data-wow-delay=".1s">
+                     <span class="text-lg font-semibold text-primary mb-2 block"> Our Software's Core Features </span>
+                     <h2 class="text-black font-bold text-3xl sm:text-4xl md:text-[45px] mb-5">eatZzepro Features</h2>
+                     <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed max-w-[570px] mx-auto">
+                        eatZzepro is designed to make restaurant operations simpler and more efficient with features that improve both restaurant management and the dining experience for customers.
+                     </p>
+                  </div>
+               </div>
             </div>
-    
-            <!-- Back to Main Button -->
-            <button class="cta-button back-btn" onclick="goBackToMain()">Back to Main</button>
-        </div>
-    </section>
-
-    <!-- Subscription Success Section -->
-    <section class="success" id="success-message" style="display: none;">
-        <div class="success-container">
-            <h2>Subscription Request Submitted</h2>
-            <p>Your subscription request has been successfully submitted. Our team will contact you soon for form verification.</p>
-            <button class="cta-button" onclick="goBackToMain()">Back to Home</button>
-        </div>
-    </section>
-
-        <script>
-            // Validate the form before submission
-            function validateForm(event) {
-                event.preventDefault(); // Prevent form from submitting normally
-                
-                // Get form inputs
-                const phoneNumber = document.getElementById("phone-number").value.trim();
-                const email = document.getElementById("email").value.trim();
-                const password = document.getElementById("password").value.trim();
-                
-                // Error messages
-                const phoneError = document.getElementById("phone-error");
-                const emailError = document.getElementById("email-error");
-                const passwordError = document.getElementById("password-error");
-                
-                let isValid = true;
-                
-                // Phone number validation
-                if (!/^\d{10}$/.test(phoneNumber)) {
-                    phoneError.style.display = "block";
-                    isValid = false;
-                } else {
-                    phoneError.style.display = "none";
-                }
-                
-                // Email validation
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    emailError.style.display = "block";
-                    isValid = false;
-                } else {
-                    emailError.style.display = "none";
-                }
-                
-                // Password validation
-                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-                if (!passwordRegex.test(password)) {
-                    passwordError.style.display = "block";
-                    isValid = false;
-                } else {
-                    passwordError.style.display = "none";
-                }
-                
-                // If any validation fails, return false to prevent form submission
-                if (!isValid) {
-                    return false;
-                }
-                
-                // If all validations pass, submit the form via AJAX
-                const formData = new FormData(document.getElementById("subscription-form"));
-                formData.append("selected_plan", document.getElementById("selected-plan").innerText);
-                formData.append("selected_price", document.getElementById("selected-price").innerText);
-        
-                // Add CSRF token to the form
-                const csrfToken = getCSRFToken();
-        
-                // Send form data via AJAX (Fetch API)
-                fetch("/subscribe-subscription/", {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': csrfToken // Add CSRF token to the headers
-                    }
-                })
-                .then(response => response.json()) // Assuming the server returns JSON
-                .then(data => {
-                    if (data.success) {
-                        // Show success message and hide other sections
-                        document.getElementById("header").style.display = "none";
-                        document.getElementById("confirmation-form").style.display = "none";
-                        document.getElementById("success-message").style.display = "block";
-                    } else {
-                        alert("There was an error with your submission. Please try again.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error submitting form:", error);
-                    alert("There was an error submitting your form. Please try again.");
-                });
-            }
-        
-            // Show the confirmation form when a subscription plan is selected
-            function showForm(plan, price) {
-                document.getElementById("selected-plan").innerText = plan;
-                document.getElementById("selected-price").innerText = price;
-                document.getElementById("pricing").style.display = "none";  // Hide pricing section
-                document.getElementById("confirmation-form").style.display = "block";  // Show subscription form
-                document.getElementById("subscription-form").reset();
-            }
-        
-            // Go back to the pricing section
-            function goBackToMain() {
-                document.getElementById("pricing").style.display = "block";  // Show pricing section
-                document.getElementById("confirmation-form").style.display = "none";  // Hide subscription form
-                document.getElementById("success-message").style.display = "none"; // Hide success message
-            }
-        
-            // Get CSRF token from the template context
-            function getCSRFToken() {
-                return document.querySelector('[name="csrfmiddlewaretoken"]').value;
-            }
-        
-            // Attach the validateForm function to form submission
-            document.getElementById("subscription-form").addEventListener("submit", validateForm);
+            <div class="pb-12 border-b border-[#E9ECF8]">
+               <div class="flex flex-wrap mx-[-16px]">
+                  <div class="w-full md:w-1/2 lg:w-1/3 px-4">
+                     <div class="mb-[70px] text-center 2xl:px-5 wow fadeInUp" data-wow-delay=".3s">
+                        <div class="mb-9 flex justify-center">
+                           <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M2.27273 0.000488281H18.1818C18.7846 0.000488281 19.3627 0.239934 19.7889 0.666153C20.2151 1.09237 20.4545 1.67045 20.4545 2.27322V48.0035C20.4545 48.6063 20.2151 49.1844 19.7889 49.6106C19.3627 50.0368 18.7846 50.0005 18.1818 50.0005H2.27273C1.66996 50.0005 1.09188 49.7601 0.665665 49.334C0.239446 48.9078 0 48.3297 0 47.727V2.27322C0 1.67045 0.239446 1.09237 0.665665 0.666153C1.09188 0.239934 1.66996 0.000488281 2.27273 0.000488281Z" fill="#ff6f61"></path>
+                           </svg>
+                        </div>
+                        <h3 class="font-bold text-black text-xl sm:text-2xl lg:text-xl xl:text-2xl mb-5">Subscription Plans</h3>
+                        <p class="text-body-color text-base leading-relaxed">
+                           Choose the best subscription plan for your restaurant and access premium features that help streamline operations and enhance the customer experience.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="w-full md:w-1/2 lg:w-1/3 px-4">
+                     <div class="mb-[70px] text-center 2xl:px-5 wow fadeInUp" data-wow-delay=".15s">
+                        <div class="mb-9 flex justify-center">
+                           <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path opacity="0.5" d="M27.2727 0.000488281V15.9096H34.0909L25 27.2732L15.9091 15.9096H22.7273V0.000488281H27.2727Z" fill="#ff6f61" />
+                              <path
+                                 d="M43.1818 0.000488281H34.0909V4.54594H43.1818C43.7846 4.54594 44.3627 4.78539 44.7889 5.21161C45.2151 5.63783 45.4545 6.21591 45.4545 6.81867V31.8187H31.8182V38.6369H18.1818V31.8187H4.54545V6.81867C4.54545 6.21591 4.7849 5.63783 5.21112 5.21161C5.63734 4.78539 6.21542 4.54594 6.81818 4.54594H15.9091V0.000488281H6.81818C5.00989 0.000488281 3.27566 0.71883 1.997 1.99749C0.718341 3.27614 0 5.01038 0 6.81867V43.1823C0 44.9906 0.718341 46.7248 1.997 48.0035C3.27566 49.2821 5.00989 50.0005 6.81818 50.0005H43.1818C44.9901 50.0005 46.7243 49.2821 48.003 48.0035C49.2817 46.7248 50 44.9906 50 43.1823V6.81867C50 5.01038 49.2817 3.27614 48.003 1.99749C46.7243 0.71883 44.9901 0.000488281 43.1818 0.000488281Z"
+                                 fill="#ff6f61"
+                                 />
+                           </svg>
+                        </div>
+                        <h3 class="font-bold text-black text-xl sm:text-2xl lg:text-xl xl:text-2xl mb-5">Multi-Restaurant Support</h3>
+                        <p class="text-body-color text-base leading-relaxed">
+                           eatZzepro enables you to manage multiple restaurants under a single account, allowing easy scaling as your business grows.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="w-full md:w-1/2 lg:w-1/3 px-4">
+                     <div class="mb-[70px] text-center 2xl:px-5 wow fadeInUp" data-wow-delay=".15s">
+                        <div class="mb-9 flex justify-center">
+                           <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                 d="M27.5265 0.000488281H2.11742C0.948003 0.000488281 0 0.948491 0 2.11791V33.8793C0 35.0487 0.948003 35.9967 2.11742 35.9967H27.5265C28.6959 35.9967 29.6439 35.0487 29.6439 33.8793V2.11791C29.6439 0.948491 28.6959 0.000488281 27.5265 0.000488281Z"
+                                 fill="#ff6f61"
+                                 />
+                              <path
+                                 opacity="0.5"
+                                 d="M48.4022 15.1783L34.5141 11.4199L33.4088 15.5087L45.2663 18.7145L38.0692 45.2839L13.541 38.6542L12.4378 42.743L39.0115 49.9274C39.2799 49.9998 39.5601 50.0187 39.8358 49.9829C40.1116 49.9471 40.3776 49.8573 40.6186 49.7187C40.8597 49.5801 41.0711 49.3953 41.2407 49.175C41.4104 48.9547 41.535 48.7031 41.6074 48.4346L49.8929 17.7743C50.0393 17.2324 49.9645 16.6545 49.685 16.1677C49.4054 15.681 48.9441 15.3251 48.4022 15.1783Z"
+                                 fill="#ff6f61"
+                                 />
+                           </svg>
+                        </div>
+                        <h3 class="font-bold text-black text-xl sm:text-2xl lg:text-xl xl:text-2xl mb-5">Easy Menu Management</h3>
+                        <p class="text-body-color text-base leading-relaxed">
+                           Upload and organize your restaurant's menu easily with no technical skills required. Just add dishes, prices, and descriptions, and you’re good to go.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="w-full md:w-1/2 lg:w-1/3 px-4">
+                     <div class="mb-[70px] text-center 2xl:px-5 wow fadeInUp" data-wow-delay=".2s">
+                        <div class="mb-9 flex justify-center">
+                           <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                 d="M18.1818 20.455H2.27273C1.66996 20.455 1.09188 20.2156 0.665665 19.7894C0.239446 19.3631 0 18.7851 0 18.1823V2.27322C0 1.67045 0.239446 1.09237 0.665665 0.666153C1.09188 0.239934 1.66996 0.000488281 2.27273 0.000488281H18.1818C18.7846 0.000488281 19.3627 0.239934 19.7889 0.666153C20.2151 1.09237 20.4545 1.67045 20.4545 2.27322V18.1823C20.4545 18.7851 20.2151 19.3631 19.7889 19.7894C19.3627 20.2156 18.7846 20.455 18.1818 20.455Z"
+                                 fill="#ff6f61"
+                                 />
+                              <path
+                                 opacity="0.5"
+                                 d="M46.7282 20.455H30.8182C30.2154 20.455 29.6373 20.2156 29.2111 19.7894C28.7849 19.3631 28.5455 18.7851 28.5455 18.1823V2.27322C28.5455 1.67045 28.7849 1.09237 29.2111 0.666153C29.6373 0.239934 30.2154 0.000488281 30.8182 0.000488281H46.7282C47.331 0.000488281 47.9091 0.239934 48.3353 0.666153C48.7615 1.09237 49.0009 1.67045 49.0009 2.27322V18.1823C49.0009 18.7851 48.7615 19.3631 48.3353 19.7894C47.9091 20.2156 47.331 20.455 46.7282 20.455Z"
+                                 fill="#ff6f61"
+                                 />
+                           </svg>
+                        </div>
+                        <h3 class="font-bold text-black text-xl sm:text-2xl lg:text-xl xl:text-2xl mb-5">QR Code Ordering</h3>
+                        <p class="text-body-color text-base leading-relaxed">
+                           Customers can scan QR codes at their tables to view the menu and place their orders directly, providing a fast, contactless dining experience.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="w-full md:w-1/2 lg:w-1/3 px-4">
+                     <div class="mb-[70px] text-center 2xl:px-5 wow fadeInUp" data-wow-delay=".25s">
+                        <div class="mb-9 flex justify-center">
+                           <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                 d="M21.7043 0.000488281H2.27273C1.66996 0.000488281 1.09188 0.239934 0.665665 0.666153C0.239446 1.09237 0 1.67045 0 2.27322V18.1823C0 18.7851 0.239446 19.3631 0.665665 19.7894C1.09188 20.2156 1.66996 20.455 2.27273 20.455H21.7043C22.3071 20.455 22.8852 20.2156 23.3114 19.7894C23.7376 19.3631 23.9771 18.7851 23.9771 18.1823V2.27322C23.9771 1.67045 23.7376 1.09237 23.3114 0.666153C22.8852 0.239934 22.3071 0.000488281 21.7043 0.000488281Z"
+                                 fill="#ff6f61"
+                                 />
+                              <path
+                                 opacity="0.5"
+                                 d="M21.7043 32.7273H2.27273C1.66996 32.7273 1.09188 32.9678 0.665665 33.394C0.239446 33.8202 0 34.3983 0 34.9999V50.0005H23.9771V34.9999C23.9771 34.3983 23.7376 33.8202 23.3114 33.394C22.8852 32.9678 22.3071 32.7273 21.7043 32.7273Z"
+                                 fill="#ff6f61"
+                                 />
+                           </svg>
+                        </div>
+                        <h3 class="font-bold text-black text-xl sm:text-2xl lg:text-xl xl:text-2xl mb-5">Real-Time Order Tracking</h3>
+                        <p class="text-body-color text-base leading-relaxed">
+                           Keep track of your restaurant’s orders in real time, ensuring quick and efficient service for your customers.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="w-full md:w-1/2 lg:w-1/3 px-4">
+                     <div class="mb-[70px] text-center 2xl:px-5 wow fadeInUp" data-wow-delay=".2s">
+                        <div class="mb-9 flex justify-center">
+                           <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path
+                                 d="M18.1818 20.455H2.27273C1.66996 20.455 1.09188 20.2156 0.665665 19.7894C0.239446 19.3631 0 18.7851 0 18.1823V2.27322C0 1.67045 0.239446 1.09237 0.665665 0.666153C1.09188 0.239934 1.66996 0.000488281 2.27273 0.000488281H18.1818C18.7846 0.000488281 19.3627 0.239934 19.7889 0.666153C20.2151 1.09237 20.4545 1.67045 20.4545 2.27322V18.1823C20.4545 18.7851 20.2151 19.3631 19.7889 19.7894C19.3627 20.2156 18.7846 20.455 18.1818 20.455Z"
+                                 fill="#ff6f61"
+                                 />
+                              <path
+                                 opacity="0.5"
+                                 d="M46.7282 20.455H30.8182C30.2154 20.455 29.6373 20.2156 29.2111 19.7894C28.7849 19.3631 28.5455 18.7851 28.5455 18.1823V2.27322C28.5455 1.67045 28.7849 1.09237 29.2111 0.666153C29.6373 0.239934 30.2154 0.000488281 30.8182 0.000488281H46.7282C47.331 0.000488281 47.9091 0.239934 48.3353 0.666153C48.7615 1.09237 49.0009 1.67045 49.0009 2.27322V18.1823C49.0009 18.7851 48.7615 19.3631 48.3353 19.7894C47.9091 20.2156 47.331 20.455 46.7282 20.455Z"
+                                 fill="#ff6f61"
+                                 />
+                           </svg>
+                        </div>
+                        <h3 class="font-bold text-black text-xl sm:text-2xl lg:text-xl xl:text-2xl mb-5">Customer Feedback & Ratings</h3>
+                        <p class="text-body-color text-base leading-relaxed">
+                           Customers can rate their experience and provide feedback, helping restaurants improve service and understand customer preferences.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- ====== Features Section End -->
+      <!-- ====== Testimonials Section Start -->
+      <!-- <section id="testimonial" class="pt-[120px] pb-20 bg-gradient-to-t from-blue-50 to-white">
+         <div class="container">
+           <div class="flex flex-wrap mx-[-16px]">
+             <div class="w-full px-4">
+               <div class="mx-auto max-w-[655px] text-center mb-20 wow fadeInUp" data-wow-delay=".1s">
+                 <span class="text-lg font-semibold text-primary mb-2 block"> Testimonials </span>
+                 <h2 class="text-black font-bold text-3xl sm:text-4xl md:text-[45px] mb-5">What Clients Says</h2>
+                 <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed max-w-[570px] mx-auto">
+                   There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form.
+                 </p>
+               </div>
+             </div>
+           </div>
+         
+           <div class="flex flex-wrap justify-center mx-[-16px]">
+             <div class="w-full lg:w-1/2 px-4">
+               <div class="bg-white relative z-10 overflow-hidden rounded-sm p-8 lg:px-6 xl:px-8 mb-10 wow fadeInUp" data-wow-delay=".1s">
+                 <div class="sm:flex justify-between lg:block xl:flex">
+                   <div class="w-full flex items-center">
+                     <div class="rounded-full overflow-hidden w-[60px] h-[60px] mt-2 mr-4">
+                       <img src="images/author-01.png" alt="image" />
+                     </div>
+                     <div class="w-full">
+                       <h5 class="text-base md:text-lg lg:text-base xl:text-lg text-black font-medium mb-1">Musharof Chowdhury</h5>
+                       <p class="text-base font-medium text-body-color">Founder @ TailGrids</p>
+                     </div>
+                   </div>
+                   <div class="max-w-[150px] w-full flex items-center sm:justify-end lg:justify-start xl:justify-end mt-4 sm:mt-0 lg:mt-4 xl:mt-0">
+                     <div>
+                       <div class="flex items-center">
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                       </div>
+                       <p class="mt-2 text-sm font-medium text-body-color">Client's Review</p>
+                     </div>
+                   </div>
+                 </div>
+                 <p class="text-lg font-medium text-body-color leading-relaxed pt-8 mt-6 border-t border-[#eee]">
+                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo urna massa, nec dictum velit dignissim ac. Curabitur non cursus tortor. Nunc dignissim accumsan commodo.
+                 </p>
+                 <div class="absolute right-0 bottom-0 z-[-1]">
+                   <svg width="49" height="60" viewBox="0 0 49 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <circle opacity="0.4" cx="37" cy="37" r="36" transform="rotate(-165 37 37)" fill="url(#paint0_linear_77:14)" />
+                     <defs>
+                       <linearGradient id="paint0_linear_77:14" x1="36.3685" y1="91.4954" x2="36.3685" y2="5.62385" gradientUnits="userSpaceOnUse">
+                         <stop stop-color="#4A6CF7" />
+                         <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
+                       </linearGradient>
+                     </defs>
+                   </svg>
+                 </div>
+               </div>
+             </div>
+             <div class="w-full lg:w-1/2 px-4">
+               <div class="bg-white relative z-10 overflow-hidden rounded-sm p-8 lg:px-6 xl:px-8 mb-10 wow fadeInUp" data-wow-delay=".15s">
+                 <div class="sm:flex justify-between lg:block xl:flex">
+                   <div class="w-full flex items-center">
+                     <div class="rounded-full overflow-hidden w-[60px] h-[60px] mt-2 mr-4">
+                       <img src="images/author-02.png" alt="image" />
+                     </div>
+                     <div class="w-full">
+                       <h5 class="text-base md:text-lg lg:text-base xl:text-lg text-black font-medium mb-1">Devid Miller</h5>
+                       <p class="text-base font-medium text-body-color">Graphic Designer</p>
+                     </div>
+                   </div>
+                   <div class="max-w-[150px] w-full flex items-center sm:justify-end lg:justify-start xl:justify-end mt-4 sm:mt-0 lg:mt-4 xl:mt-0">
+                     <div>
+                       <div class="flex items-center">
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                       </div>
+                       <p class="mt-2 text-sm font-medium text-body-color">Client's Review</p>
+                     </div>
+                   </div>
+                 </div>
+                 <p class="text-lg font-medium text-body-color leading-relaxed pt-8 mt-6 border-t border-[#eee]">
+                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo urna massa, nec dictum velit dignissim ac. Curabitur non cursus tortor. Nunc dignissim accumsan commodo.
+                 </p>
+                 <div class="absolute right-0 bottom-0 z-[-1]">
+                   <svg width="49" height="60" viewBox="0 0 49 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <circle opacity="0.4" cx="37" cy="37" r="36" transform="rotate(-165 37 37)" fill="url(#paint0_linear_77:14)" />
+                     <defs>
+                       <linearGradient id="paint0_linear_77:14" x1="36.3685" y1="91.4954" x2="36.3685" y2="5.62385" gradientUnits="userSpaceOnUse">
+                         <stop stop-color="#4A6CF7" />
+                         <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
+                       </linearGradient>
+                     </defs>
+                   </svg>
+                 </div>
+               </div>
+             </div>
+             <div class="w-full lg:w-1/2 px-4">
+               <div class="bg-white relative z-10 overflow-hidden rounded-sm p-8 lg:px-6 xl:px-8 mb-10 wow fadeInUp" data-wow-delay=".2s">
+                 <div class="sm:flex justify-between lg:block xl:flex">
+                   <div class="w-full flex items-center">
+                     <div class="rounded-full overflow-hidden w-[60px] h-[60px] mt-2 mr-4">
+                       <img src="images/author-03.png" alt="image" />
+                     </div>
+                     <div class="w-full">
+                       <h5 class="text-base md:text-lg lg:text-base xl:text-lg text-black font-medium mb-1">Jonathon Smith</h5>
+                       <p class="text-base font-medium text-body-color">UI/UX Designer</p>
+                     </div>
+                   </div>
+                   <div class="max-w-[150px] w-full flex items-center sm:justify-end lg:justify-start xl:justify-end mt-4 sm:mt-0 lg:mt-4 xl:mt-0">
+                     <div>
+                       <div class="flex items-center">
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                       </div>
+                       <p class="mt-2 text-sm font-medium text-body-color">Client's Review</p>
+                     </div>
+                   </div>
+                 </div>
+                 <p class="text-lg font-medium text-body-color leading-relaxed pt-8 mt-6 border-t border-[#eee]">
+                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo urna massa, nec dictum velit dignissim ac. Curabitur non cursus tortor. Nunc dignissim accumsan commodo.
+                 </p>
+                 <div class="absolute right-0 bottom-0 z-[-1]">
+                   <svg width="49" height="60" viewBox="0 0 49 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <circle opacity="0.4" cx="37" cy="37" r="36" transform="rotate(-165 37 37)" fill="url(#paint0_linear_77:14)" />
+                     <defs>
+                       <linearGradient id="paint0_linear_77:14" x1="36.3685" y1="91.4954" x2="36.3685" y2="5.62385" gradientUnits="userSpaceOnUse">
+                         <stop stop-color="#4A6CF7" />
+                         <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
+                       </linearGradient>
+                     </defs>
+                   </svg>
+                 </div>
+               </div>
+             </div>
+             <div class="w-full lg:w-1/2 px-4">
+               <div class="bg-white relative z-10 overflow-hidden rounded-sm p-8 lg:px-6 xl:px-8 mb-10 wow fadeInUp" data-wow-delay=".25s">
+                 <div class="sm:flex justify-between lg:block xl:flex">
+                   <div class="w-full flex items-center">
+                     <div class="rounded-full overflow-hidden w-[60px] h-[60px] mt-2 mr-4">
+                       <img src="images/author-04.png" alt="image" />
+                     </div>
+                     <div class="w-full">
+                       <h5 class="text-base md:text-lg lg:text-base xl:text-lg text-black font-medium mb-1">Jubin Nutial</h5>
+                       <p class="text-sm font-medium text-body-color">App Developer</p>
+                     </div>
+                   </div>
+                   <div class="max-w-[150px] w-full flex items-center sm:justify-end lg:justify-start xl:justify-end mt-4 sm:mt-0 lg:mt-4 xl:mt-0">
+                     <div>
+                       <div class="flex items-center">
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                         <span class="text-yellow mr-1 block">
+                           <svg width="18" height="16" viewBox="0 0 18 16" class="fill-current">
+                             <path
+                               d="M9.09815 0.361679L11.1054 6.06601H17.601L12.3459 9.59149L14.3532 15.2958L9.09815 11.7703L3.84309 15.2958L5.85035 9.59149L0.595291 6.06601H7.0909L9.09815 0.361679Z"
+                             />
+                           </svg>
+                         </span>
+                       </div>
+                       <p class="mt-2 text-sm font-medium text-body-color">Client's Review</p>
+                     </div>
+                   </div>
+                 </div>
+                 <p class="text-lg font-medium text-body-color leading-relaxed pt-8 mt-6 border-t border-[#eee]">
+                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce commodo urna massa, nec dictum velit dignissim ac. Curabitur non cursus tortor. Nunc dignissim accumsan commodo.
+                 </p>
+                 <div class="absolute right-0 bottom-0 z-[-1]">
+                   <svg width="49" height="60" viewBox="0 0 49 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <circle opacity="0.4" cx="37" cy="37" r="36" transform="rotate(-165 37 37)" fill="url(#paint0_linear_77:14)" />
+                     <defs>
+                       <linearGradient id="paint0_linear_77:14" x1="36.3685" y1="91.4954" x2="36.3685" y2="5.62385" gradientUnits="userSpaceOnUse">
+                         <stop stop-color="#4A6CF7" />
+                         <stop offset="1" stop-color="#4A6CF7" stop-opacity="0" />
+                       </linearGradient>
+                     </defs>
+                   </svg>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+         </section> -->
+      <!-- ====== Testimonials Section End -->
+      <!-- ====== Pricing Section Start -->
+      <section id="pricing" class="">
+         <div class="container">
+            <div class="flex flex-wrap mx-[-16px]">
+               <div class="w-full px-4">
+                  <div class="mx-auto max-w-[655px] text-center mb-20 wow fadeInUp" data-wow-delay=".1s">
+                     <span class="text-lg font-semibold text-primary mb-2 block"> Affordable Pricing </span>
+                     <h2 class="text-black font-bold text-3xl sm:text-4xl md:text-[45px] mb-5">Our Pricing Plans</h2>
+                     <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed max-w-[570px] mx-auto">
+                        Choose the best plan for your restaurant and elevate the customer experience.
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="flex flex-wrap justify-center mx-[-16px]">
+               <!-- Basic Plan -->
+               <div class="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 px-4">
+                  <div class="bg-white shadow-pricing p-10 md:px-8 lg:py-10 lg:px-6 xl:p-10 text-center rounded-sm relative z-10 mb-10">
+                     <div class="flex justify-center items-end">
+                        <h2 class="font-bold text-black text-[42px] mb-2">
+                           ₹99/-
+                        </h2>
+                     </div>
+                     <p class="text-base text-body-color leading-relaxed font-larger mb-9 lg:mb-6 xl:mb-9 border-b border-[#E9ECF8]">
+                        For 1 Month
+                     </p>
+                     <div class="mb-8">
+                        <p class="font-medium text-base text-body-color mb-3">Full access to all features</p>
+                        <p class="font-medium text-base text-body-color mb-3">QR code generation</p>
+                        <p class="font-medium text-base text-body-color mb-3">Order Management</p>
+                        <p class="font-medium text-base text-body-color mb-3">Menu management</p>
+                     </div>
+                     <a href="javascript:void(0)" class="flex items-center justify-center p-3 rounded-sm text-semibold text-base text-white hover:shadow-signUp transition duration-300 ease-in-out" style="background-color: #ff6f61;">
+                     Purchase Now
+                     </a>
+                  </div>
+               </div>
+               <!-- Standard Plan -->
+               <div class="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 px-4">
+                  <div class="bg-white shadow-pricing p-10 md:px-8 lg:py-10 lg:px-6 xl:p-10 text-center rounded-sm relative z-10 mb-10">
+                     <div class="flex justify-center items-end">
+                        <h2 class="font-bold text-black text-[42px] mb-2">
+                           179/-
+                        </h2>
+                     </div>
+                     <p class="text-base text-body-color leading-relaxed font-larger mb-9 lg:mb-6 xl:mb-9 border-b border-[#E9ECF8]">
+                        For 2 Month
+                     </p>
+                     <div class="mb-8">
+                        <p class="font-medium text-base text-body-color mb-3">Full access to all features</p>
+                        <p class="font-medium text-base text-body-color mb-3">QR code generation</p>
+                        <p class="font-medium text-base text-body-color mb-3">Order Management</p>
+                        <p class="font-medium text-base text-body-color mb-3">Menu management</p>
+                     </div>
+                     <a href="javascript:void(0)" class="flex items-center justify-center p-3 rounded-sm text-semibold text-base text-white hover:shadow-signUp transition duration-300 ease-in-out" style="background-color: #ff6f61;">
+                     Purchase Now
+                     </a>
+                  </div>
+               </div>
+               <!-- Premium Plan -->
+               <div class="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 px-4">
+                  <div class="bg-white shadow-pricing p-10 md:px-8 lg:py-10 lg:px-6 xl:p-10 text-center rounded-sm relative z-10 mb-10">
+                     <div class="flex justify-center items-end">
+                        <h2 class="font-bold text-black text-[42px] mb-2">
+                           ₹299/-
+                        </h2>
+                     </div>
+                     <p class="text-base text-body-color leading-relaxed font-larger mb-9 lg:mb-6 xl:mb-9 border-b border-[#E9ECF8]">
+                        For 3 Month
+                     </p>
+                     <div class="mb-8">
+                        <p class="font-medium text-base text-body-color mb-3">Full access to all features</p>
+                        <p class="font-medium text-base text-body-color mb-3">QR code generation</p>
+                        <p class="font-medium text-base text-body-color mb-3">Order Management</p>
+                        <p class="font-medium text-base text-body-color mb-3">Menu management</p>
+                     </div>
+                     <a href="javascript:void(0)" class="flex items-center justify-center p-3 rounded-sm text-semibold text-base text-white hover:shadow-signUp transition duration-300 ease-in-out" style="background-color: #ff6f61;">
+                     Purchase Now
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- ====== Pricing Section End -->
+      <!-- ====== Contact Section Start -->
+      <section id="contact" class="py-[120px]">
+         <div class="container">
+            <div class="flex flex-wrap mx-[-16px]">
+               <div class="w-full px-4">
+                  <div class="mx-auto max-w-[570px] text-center mb-[100px] wow fadeInUp" data-wow-delay=".1s">
+                     <span class="text-lg font-semibold text-primary mb-2 block"> Have a Question? </span>
+                     <h2 class="text-black font-bold text-3xl sm:text-4xl md:text-[45px] mb-4">Contact eatZzepro Support</h2>
+                     <p class="text-body-color text-base md:text-lg leading-relaxed md:leading-relaxed">
+                        Need assistance with your restaurant account or have any inquiries about our features? Reach out to us, and we’ll get back to you as soon as possible!
+                     </p>
+                  </div>
+               </div>
+            </div>
+            <div class="flex flex-wrap justify-center mx-[-16px]">
+               <div class="w-full lg:w-10/12 xl:w-8/12 px-4">
+                  <div>
+                     <form>
+                        <div class="flex flex-wrap mx-[-16px]">
+                           <div class="w-full md:w-1/2 px-4">
+                              <div class="mb-8">
+                                 <label for="fname" class="block text-sm font-medium text-body-color mb-3"> First Name <span class="text-red-500">*</span> </label>
+                                 <input
+                                    type="text"
+                                    name="fname"
+                                    placeholder="Enter your first name"
+                                    class="w-full border border-[#DEE3F7] rounded-sm py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary transition"
+                                    />
+                              </div>
+                           </div>
+                           <div class="w-full md:w-1/2 px-4">
+                              <div class="mb-8">
+                                 <label for="lname" class="block text-sm font-medium text-body-color mb-3"> Last Name <span class="text-red-500">*</span> </label>
+                                 <input
+                                    type="text"
+                                    name="lname"
+                                    placeholder="Enter your last name"
+                                    class="w-full border border-[#DEE3F7] rounded-sm py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary transition"
+                                    />
+                              </div>
+                           </div>
+                           <div class="w-full md:w-1/2 px-4">
+                              <div class="mb-8">
+                                 <label for="phone" class="block text-sm font-medium text-body-color mb-3"> Phone Number <span class="text-red-500">*</span> </label>
+                                 <input
+                                    type="text"
+                                    name="phone"
+                                    placeholder="Enter your phone number"
+                                    class="w-full border border-[#DEE3F7] rounded-sm py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary transition"
+                                    />
+                              </div>
+                           </div>
+                           <div class="w-full md:w-1/2 px-4">
+                              <div class="mb-8">
+                                 <label for="email" class="block text-sm font-medium text-body-color mb-3"> Your Email <span class="text-red-500">*</span> </label>
+                                 <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    class="w-full border border-[#DEE3F7] rounded-sm py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary transition"
+                                    />
+                              </div>
+                           </div>
+                           <div class="w-full px-4">
+                              <div class="mb-8">
+                                 <label for="message" class="block text-sm font-medium text-body-color mb-3"> Your Message <span class="text-red-500">*</span> </label>
+                                 <textarea
+                                    name="message"
+                                    rows="5"
+                                    placeholder="Enter your message or query"
+                                    class="w-full border border-[#DEE3F7] rounded-sm py-3 px-6 text-body-color text-base placeholder-body-color outline-none focus-visible:shadow-none focus:border-primary transition resize-none"
+                                    ></textarea>
+                              </div>
+                           </div>
+                           <div class="w-full mx-auto text-center px-4">
+                              <button
+                                 class="text-base font-medium text-white py-4 px-11 hover:shadow-signUp rounded-sm inline-flex mx-auto transition duration-300 ease-in-out" style="background-color: #ff6f61;"
+                                 >
+                              Submit Support Request
+                              </button>
+                           </div>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+      <!-- ====== Contact Section End -->
+      <!-- ====== Newsletter Section Start -->
+      <!-- <section id="newsletter">
+         <div class="container">
+           <div class="bg-primary overflow-hidden relative z-10 rounded-sm py-10 px-12 sm:px-8 lg:flex items-center justify-between">
+             <div class="mb-6 lg:mb-0 md:max-w-[400px] w-full">
+               <h2 class="font-bold text-white text-2xl sm:text-3xl leading-snug sm:leading-snug">Want to get all the latest updates from SaaS?</h2>
+             </div>
+             <div class="lg:max-w-[520px] w-full">
+               <form class="sm:flex items-center justify-between">
+                 <input
+                   type="email"
+                   placeholder="Enter Your Email"
+                   class="lg:max-w-[350px] w-full sm:mr-4 mb-4 sm:mb-0 bg-white rounded-sm py-3 px-6 text-body-color placeholder-body-color outline-none focus-visible:shadow-none"
+                 />
+                 <button
+                   type="submit"
+                   class="bg-black text-white hover:shadow-signUp transition rounded-sm py-3 px-12 sm:px-8 md:px-10 text-base font-semibold duration-300 ease-in-out"
+                 >
+                   Subscribe
+                 </button>
+               </form>
+             </div>
+             <div class="absolute w-full h-full top-0 left-0 z-[-1]">
+               <svg width="1170" height="180" viewBox="0 0 1170 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <mask id="mask0_32:22" style="mask-type: alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1170" height="181">
+                   <rect y="0.000488281" width="1170" height="180" rx="2" fill="#4A6CF7" />
+                 </mask>
+                 <g mask="url(#mask0_32:22)">
+                   <path
+                     opacity="0.1"
+                     fill-rule="evenodd"
+                     clip-rule="evenodd"
+                     d="M517.924 0.362991C474.865 29.7973 337.151 43.6819 333.289 -65.9782C332.164 -98.1277 176.271 18.7043 123.154 -42.7352C91.2589 -32.0459 9.36359 -61.1568 9.36359 -61.1568C119.505 -13.6184 74.9786 -4.84753 74.9786 -4.84753C148.455 20.9409 182.866 59.4467 257.666 70.5996L258.92 70.786C341.923 82.9137 427.15 70.7086 517.626 0.518265L517.924 0.362991Z"
+                     fill="url(#paint0_linear_32:22)"
+                   />
+                   <path
+                     opacity="0.1"
+                     fill-rule="evenodd"
+                     clip-rule="evenodd"
+                     d="M116.56 135.053C73.5018 164.488 -64.2122 178.372 -68.0741 68.7122C-69.1992 36.5627 -225.092 153.395 -278.21 91.9552C-310.105 102.645 -392 73.5336 -392 73.5336C-281.859 121.072 -326.385 129.843 -326.385 129.843C-252.909 155.631 -218.497 194.137 -143.697 205.29L-142.444 205.476C-59.4408 217.604 25.7864 205.399 116.262 135.209L116.56 135.053Z"
+                     fill="url(#paint1_linear_32:22)"
+                   />
+                   <path
+                     opacity="0.1"
+                     fill-rule="evenodd"
+                     clip-rule="evenodd"
+                     d="M859.047 123.309C793.674 165.5 597.387 170.368 609.423 -7.857C612.962 -60.107 374.646 109.284 309.583 2.9043C262.931 16.1446 152.159 -41.5239 152.159 -41.5239C299.8 49.6279 235.653 58.1412 235.653 58.1412C335.089 109.347 377.446 176.161 481.081 203.816L482.818 204.279C597.858 234.563 719.91 225.696 858.602 123.522L859.047 123.309Z"
+                     fill="url(#paint2_linear_32:22)"
+                   />
+                   <path
+                     opacity="0.2"
+                     fill-rule="evenodd"
+                     clip-rule="evenodd"
+                     d="M1000 38.936C1046.89 8.71569 1187.67 5.22891 1179.04 132.886C1176.5 170.311 1347.43 48.9816 1394.09 125.178C1427.55 115.694 1507 157 1507 157C1401.11 91.7113 1447.12 85.6135 1447.12 85.6135C1375.8 48.9366 1345.42 1.07942 1271.09 -18.7287L1269.84 -19.0601C1187.33 -40.7523 1099.79 -34.4009 1000.32 38.7831L1000 38.936Z"
+                     fill="url(#paint3_linear_32:22)"
+                   />
+                   <path
+                     fill-rule="evenodd"
+                     clip-rule="evenodd"
+                     d="M439 216C456.118 216 470 202.345 470 185.5C470 168.656 456.118 155 439 155C421.882 155 408 168.656 408 185.5C408 202.345 421.882 216 439 216Z"
+                     fill="#FFDDF7"
+                   />
+                   <path
+                     fill-rule="evenodd"
+                     clip-rule="evenodd"
+                     d="M23.7408 -12.6863C21.3674 -15.9137 18.272 -18.6247 14.7499 -20.6024C11.1896 -22.5818 7.25873 -23.8046 3.20375 -24.1941C3.0226 -24.2134 2.83781 -24.2391 2.65018 -24.2486L2.09689 -24.2813C1.72268 -24.2984 1.35241 -24.33 0.988197 -24.3298C0.61172 -24.3298 0.242724 -24.3378 -0.13165 -24.3341L-1.24763 -24.2897C-2.73739 -24.2005 -4.21866 -24.0036 -5.67997 -23.7004C-7.14348 -23.3773 -8.58317 -22.9543 -9.98887 -22.4344C-11.3877 -21.8915 -12.7544 -21.2506 -14.0705 -20.5223C-15.3654 -19.7783 -16.6237 -18.9498 -17.8167 -18.0292C-19.0006 -17.093 -20.1164 -16.0809 -21.1625 -14.9899C-22.191 -13.8897 -23.1401 -12.7151 -24.0055 -11.4795C-24.8602 -10.2388 -25.6226 -8.93694 -26.2865 -7.58448C-26.4586 -7.20945 -26.6476 -6.84287 -26.8134 -6.45691L-27.2835 -5.31476L-27.7122 -4.14311C-27.8497 -3.75037 -27.9607 -3.3536 -28.085 -2.95883C-28.5476 -1.36754 -28.8799 0.258775 -29.0785 1.90401C-29.1101 2.31206 -29.164 2.72337 -29.1924 3.13688L-29.2644 4.37944L-29.2756 5.62213C-29.2704 6.0308 -29.2381 6.44446 -29.2287 6.86042C-29.1369 8.51276 -28.9042 10.1543 -28.5332 11.767C-26.8531 19.1994 -22.1123 25.8119 -15.7011 29.891C-14.6891 30.5502 -13.6223 31.1147 -12.5479 31.6505L-11.7169 32.0171L-11.3062 32.2026L-10.8836 32.3667L-10.0389 32.6939C-9.75931 32.7996 -9.47472 32.8927 -9.18808 32.9896C-8.62076 33.1939 -8.03547 33.3454 -7.45345 33.5121C-7.16086 33.5982 -6.87126 33.6581 -6.57534 33.7289C-6.28153 33.7961 -5.99208 33.8768 -5.69389 33.9305C-5.09858 34.0361 -4.50232 34.1642 -3.90245 34.2356L-3.00445 34.3608L-2.104 34.4481C-1.54408 34.5135 -0.982016 34.5193 -0.418604 34.5486C-0.139873 34.5686 0.143884 34.5554 0.424358 34.5574L1.27074 34.5508L2.1174 34.5028C2.39857 34.485 2.68443 34.4754 2.96682 34.4386C3.52512 34.375 4.08589 34.3366 4.64663 34.2351C6.8821 33.9002 9.07112 33.3164 11.1771 32.5049C11.5227 32.3673 11.8523 32.2231 12.1948 32.0801C12.3601 32.0089 12.5287 31.9432 12.701 31.8631L13.1952 31.6252C13.5164 31.4664 13.8552 31.3169 14.1782 31.1402L15.138 30.6152C15.2965 30.5322 15.4589 30.4348 15.61 30.339L16.0763 30.0528C16.3899 29.8597 16.6969 29.6763 16.9978 29.4613L17.9014 28.8388L18.7685 28.1742C19.9091 27.268 21.0113 26.2952 21.9969 25.2258C22.9958 24.1585 23.9275 23.0377 24.7398 21.8364C26.8381 18.8087 28.3322 15.4044 29.1402 11.8104C29.9301 8.29603 30.034 4.66221 29.4464 1.10845C29.182 -0.485233 28.7992 -2.07361 28.2972 -3.61627C27.7775 -5.1475 27.1551 -6.64621 26.3621 -8.01968C26.2944 -8.15792 26.2224 -8.28271 26.1475 -8.3913L25.9384 -8.69072C25.8373 -8.83876 25.7271 -8.98033 25.6085 -9.11472C25.4085 -9.3138 25.2714 -9.36212 25.1656 -9.2719C25.0599 -9.18168 25.0825 -8.76366 25.1871 -8.24599C25.3018 -7.73175 25.4412 -7.09088 25.6587 -6.56679C26.2175 -5.12953 26.6751 -3.65498 27.0284 -2.15394C27.1032 -1.77206 27.1993 -1.39526 27.2735 -1.01429C27.3381 -0.628969 27.4134 -0.246181 27.4897 0.138433C27.5442 0.527186 27.6092 0.913431 27.6668 1.30765C27.7234 1.70005 27.7682 2.09313 27.8177 2.49443C28.2844 6.35271 27.8374 10.3742 26.5377 14.1388C25.4727 17.2232 23.885 20.1013 21.844 22.6473C20.6945 24.0639 19.4371 25.3777 18.0298 26.5581C16.6312 27.7324 15.0912 28.7672 13.4244 29.6032L11.9314 30.362C10.3461 31.1154 8.68714 31.7029 6.98093 32.1151C6.69925 32.1951 6.41454 32.249 6.13198 32.3064L5.27461 32.4832L4.41618 32.6158L3.99118 32.679C3.84689 32.698 3.70222 32.7139 3.55725 32.7267L2.68783 32.8195C2.39913 32.8453 2.11163 32.8521 1.81925 32.8716C1.24727 32.9116 0.660716 32.9054 0.0901288 32.9057C-0.206459 32.9179 -0.490423 32.8887 -0.784739 32.8837C-1.07363 32.8672 -1.35627 32.8615 -1.64989 32.8368C-2.21945 32.7758 -2.8063 32.7478 -3.37183 32.6517C-3.66213 32.6117 -3.94983 32.5762 -4.23207 32.529L-5.07966 32.3651L-5.51251 32.2883L-5.93462 32.1884L-6.77013 31.9822L-7.63999 31.7375L-8.07523 31.6148L-8.4991 31.4697L-9.35579 31.1847L-10.1888 30.8568L-10.6103 30.6946L-11.0286 30.5171L-11.8473 30.1507L-12.6508 29.7475L-13.0577 29.5476L-13.451 29.329L-14.2303 28.8839L-14.9922 28.4057L-15.3736 28.1657C-15.5046 28.0859 -15.6185 27.9938 -15.7501 27.9131L-16.4861 27.3957C-16.7246 27.214 -16.9555 27.0243 -17.1945 26.8417L-17.5491 26.5642C-17.664 26.4703 -17.7725 26.3665 -17.8885 26.2708L-18.5688 25.6812C-18.7842 25.4764 -19.0023 25.2671 -19.2102 25.0544C-19.3404 24.934 -19.4705 24.8137 -19.5915 24.6881C-19.7217 24.5677 -19.8348 24.435 -19.9564 24.3085C-20.1996 24.0555 -20.4505 23.8105 -20.6755 23.5469C-20.9102 23.2877 -21.1443 23.0295 -21.3693 22.7659C-21.4904 22.6403 -21.5943 22.5023 -21.7079 22.3687L-22.0288 21.9602L-22.3593 21.5559C-22.4638 21.4171 -22.5597 21.2721 -22.6641 21.1333C-22.8644 20.8494 -23.0739 20.5707 -23.2752 20.285C-23.6416 19.6926 -24.0373 19.1124 -24.3537 18.4802C-25.146 17.0238 -25.8966 15.4922 -26.54 14.0202C-26.718 13.6068 -26.8807 13.0936 -27.024 12.614C-27.4005 11.2466 -27.6719 9.85131 -27.8631 8.44736C-28.0261 7.0355 -28.0999 5.61477 -28.0844 4.19362C-28.071 3.92236 -28.0673 3.65548 -28.0635 3.38857C-28.0657 3.25865 -28.0698 3.12507 -28.0618 2.99171L-28.0378 2.59168C-28.0213 2.32588 -28.0052 2.05915 -27.979 1.789C-27.9528 1.51886 -27.9016 1.25001 -27.8615 0.982808C-27.6513 -0.209646 -27.3641 -1.3737 -27.0496 -2.53283C-26.8721 -3.1089 -26.7117 -3.6934 -26.5151 -4.25742C-26.4136 -4.54434 -26.3264 -4.83511 -26.2217 -5.11656L-25.9007 -5.96983C-25.3192 -7.50781 -24.4558 -8.95716 -23.5838 -10.3495C-22.4561 -12.143 -21.1196 -13.7963 -19.6024 -15.2749C-18.0919 -16.7603 -16.4092 -18.0524 -14.6152 -19.1732C-10.4876 -21.7627 -5.70083 -23.2949 -0.882395 -23.6153C1.21771 -23.764 3.33145 -23.6364 5.4063 -23.303C7.47572 -22.9579 9.50721 -22.4051 11.4976 -21.7132C12.0656 -21.5287 12.6225 -21.2794 13.1894 -21.0336C13.4673 -20.9099 13.7466 -20.7627 14.0217 -20.6227C14.2989 -20.4792 14.5831 -20.3445 14.8484 -20.1795C15.1212 -20.0225 15.3941 -19.8655 15.6583 -19.7023C15.9322 -19.5435 16.1935 -19.3641 16.4513 -19.1911C16.9845 -18.8565 17.4847 -18.4738 17.9852 -18.1118C19.2875 -17.1353 20.5016 -16.0462 21.6132 -14.857C22.7228 -13.6712 23.7379 -12.3969 24.612 -11.0302C24.7803 -10.8018 24.9297 -10.5639 25.0946 -10.3203C25.2601 -10.0758 25.4409 -9.82556 25.6553 -9.55949C25.0446 -10.7225 24.4641 -11.728 23.7408 -12.6863Z"
+                     fill="#FF88E4"
+                     fill-opacity="0.48"
+                   />
+                 </g>
+                 <defs>
+                   <linearGradient id="paint0_linear_32:22" x1="239.699" y1="-19.4459" x2="377.873" y2="146.769" gradientUnits="userSpaceOnUse">
+                     <stop stop-color="#E2DDFE" stop-opacity="0.01" />
+                     <stop offset="1" stop-color="#E2DDFE" stop-opacity="0.88" />
+                   </linearGradient>
+                   <linearGradient id="paint1_linear_32:22" x1="-161.665" y1="115.244" x2="-23.4902" y2="281.46" gradientUnits="userSpaceOnUse">
+                     <stop stop-color="#E2DDFE" stop-opacity="0.01" />
+                     <stop offset="1" stop-color="#E2DDFE" stop-opacity="0.88" />
+                   </linearGradient>
+                   <linearGradient id="paint2_linear_32:22" x1="470.113" y1="55.5749" x2="674.521" y2="314.05" gradientUnits="userSpaceOnUse">
+                     <stop stop-color="#E2DDFE" stop-opacity="0.01" />
+                     <stop offset="1" stop-color="#E2DDFE" stop-opacity="0.88" />
+                   </linearGradient>
+                   <linearGradient id="paint3_linear_32:22" x1="1235.5" y1="11.5005" x2="1047.87" y2="-80.0782" gradientUnits="userSpaceOnUse">
+                     <stop stop-color="#E2DDFE" stop-opacity="0.01" />
+                     <stop offset="1" stop-color="#E2DDFE" stop-opacity="0.88" />
+                   </linearGradient>
+                 </defs>
+               </svg>
+             </div>
+           </div>
+         </div>
+         </section> -->
+      <!-- ====== Newsletter Section End -->
+      <!-- ====== Footer Section Start -->
+      <footer class="pb-12">
+         <div class="container">
+            <div class="flex flex-wrap mx-[-16px]">
+               <div class="w-full lg:w-4/12 2xl:w-5/12 px-4">
+                  <div class="mb-6">
+                     <a href="#" class="inline-block mb-5">
+                     <img src="{% static 'Home/images/eatzze-logo.png'%}" alt="logo" class="max-w-full h-9" style="width: 120px;height: 70px;object-fit: cover;"/>
+                     </a>
+                     <p class="text-base text-body-color font-medium">© 2025 <b>eatZzepro.com</b></p>
+                  </div>
+               </div>
+               <div class="w-full md:w-8/12 lg:w-5/12 2xl:w-5/12 px-4">
+                  <div class="mb-6 mt-4">
+                     <h3 class="font-medium text-black text-xl mb-4">Quick Links</h3>
+                     <div class="flex flex-wrap items-center">
+                        <a href="javascript:void(0)" class="text-base text-body-color hover:text-primary font-medium mr-8"> Contact </a>
+                        <a href="javascript:void(0)" class="text-base text-body-color hover:text-primary font-medium mr-8"> About us </a>
+                        <a href="javascript:void(0)" class="text-base text-body-color hover:text-primary font-medium mr-8"> FAQ's </a>
+                        <a href="javascript:void(0)" class="text-base text-body-color hover:text-primary font-medium"> Support </a>
+                     </div>
+                  </div>
+               </div>
+               <div class="w-full md:w-4/12 lg:w-3/12 2xl:w-2/12 px-4">
+                  <div class="mb-6 mt-4 md:text-right">
+                     <h3 class="font-medium text-black text-xl mb-4">Follow Us</h3>
+                     <div class="flex flex-wrap md:justify-end items-center">
+                        <a href="javascript:void(0)" class="text-body-color hover:text-primary">
+                           <svg width="9" height="18" viewBox="0 0 9 18" class="fill-current">
+                              <path
+                                 d="M8.13643 7.00049H6.78036H6.29605V6.43597V4.68597V4.12146H6.78036H7.79741C8.06378 4.12146 8.28172 3.89565 8.28172 3.55694V0.565004C8.28172 0.254521 8.088 0.000488281 7.79741 0.000488281H6.02968C4.11665 0.000488281 2.78479 1.58113 2.78479 3.92388V6.37952V6.94404H2.30048H0.65382C0.314802 6.94404 0 7.25452 0 7.70613V9.73839C0 10.1336 0.266371 10.5005 0.65382 10.5005H2.25205H2.73636V11.065V16.7384C2.73636 17.1336 3.00273 17.5005 3.39018 17.5005H5.66644C5.81174 17.5005 5.93281 17.4158 6.02968 17.3029C6.12654 17.19 6.19919 16.9924 6.19919 16.8231V11.0932V10.5287H6.70771H7.79741C8.11222 10.5287 8.35437 10.3029 8.4028 9.9642V9.93597V9.90775L8.74182 7.96017C8.76604 7.76258 8.74182 7.53678 8.59653 7.31097C8.54809 7.16984 8.33016 7.02871 8.13643 7.00049Z"
+                                 />
+                           </svg>
+                        </a>
+                        <a href="javascript:void(0)" class="text-body-color hover:text-primary ml-6">
+                           <svg width="19" height="14" viewBox="0 0 19 14" class="fill-current">
+                              <path
+                                 d="M16.3024 2.26076L17.375 1.02789C17.6855 0.693982 17.7702 0.437132 17.7984 0.308707C16.9516 0.771036 16.1613 0.925146 15.6532 0.925146H15.4556L15.3427 0.822406C14.6653 0.283022 13.8185 0.000488281 12.9153 0.000488281C10.9395 0.000488281 9.3871 1.49021 9.3871 3.2111C9.3871 3.31384 9.3871 3.46795 9.41532 3.57069L9.5 4.08439L8.90726 4.05871C5.29435 3.95597 2.33065 1.13063 1.85081 0.642612C1.06048 1.92686 1.5121 3.15973 1.99194 3.93028L2.95161 5.36864L1.42742 4.59809C1.45565 5.67686 1.90726 6.52446 2.78226 7.1409L3.54435 7.6546L2.78226 7.93713C3.2621 9.24706 4.33468 9.78645 5.125 9.99193L6.16935 10.2488L5.18145 10.8652C3.60081 11.8926 1.625 11.8156 0.75 11.7385C2.52823 12.8686 4.64516 13.1255 6.1129 13.1255C7.21371 13.1255 8.03226 13.0227 8.22984 12.9457C16.1331 11.2505 16.5 4.82926 16.5 3.54501V3.36521L16.6694 3.26248C17.629 2.44056 18.0242 2.00391 18.25 1.74706C18.1653 1.77275 18.0524 1.82412 17.9395 1.8498L16.3024 2.26076Z"
+                                 />
+                           </svg>
+                        </a>
+                        <a href="javascript:void(0)" class="text-body-color hover:text-primary ml-6">
+                           <svg width="18" height="14" viewBox="0 0 18 14" class="fill-current">
+                              <path
+                                 d="M17.5058 2.07168C17.3068 1.24929 16.7099 0.609661 15.9423 0.396451C14.5778 0.000488354 9.0627 0.000488281 9.0627 0.000488281C9.0627 0.000488281 3.54766 0.000488354 2.18311 0.396451C1.41555 0.609661 0.818561 1.24929 0.619565 2.07168C0.25 3.56415 0.25 6.61002 0.25 6.61002C0.25 6.61002 0.25 9.68634 0.619565 11.1484C0.818561 11.9707 1.41555 12.6104 2.18311 12.8236C3.54766 13.2195 9.0627 13.2195 9.0627 13.2195C9.0627 13.2195 14.5778 13.2195 15.9423 12.8236C16.7099 12.6104 17.3068 11.9707 17.5058 11.1484C17.8754 9.68634 17.8754 6.61002 17.8754 6.61002C17.8754 6.61002 17.8754 3.56415 17.5058 2.07168ZM7.30016 9.44267V3.77736L11.8771 6.61002L7.30016 9.44267Z"
+                                 />
+                           </svg>
+                        </a>
+                        <a href="javascript:void(0)" class="text-body-color hover:text-primary ml-6">
+                           <svg width="17" height="16" viewBox="0 0 17 16" class="fill-current">
+                              <path
+                                 d="M15.2196 0.000488281H1.99991C1.37516 0.000488281 0.875366 0.49798 0.875366 1.11984V14.3034C0.875366 14.9004 1.37516 15.4227 1.99991 15.4227H15.1696C15.7943 15.4227 16.2941 14.9252 16.2941 14.3034V1.09497C16.3441 0.49798 15.8443 0.000488281 15.2196 0.000488281ZM5.44852 13.1094H3.17444V5.77139H5.44852V13.1094ZM4.29899 4.75153C3.54929 4.75153 2.97452 4.15454 2.97452 3.43318C2.97452 2.71182 3.57428 2.11483 4.29899 2.11483C5.02369 2.11483 5.62345 2.71182 5.62345 3.43318C5.62345 4.15454 5.07367 4.75153 4.29899 4.75153ZM14.07 13.1094H11.796V9.55232C11.796 8.70659 11.771 7.58723 10.5964 7.58723C9.39693 7.58723 9.222 8.53246 9.222 9.4777V13.1094H6.94792V5.77139H9.17202V6.79124H9.19701C9.52188 6.19425 10.2466 5.59727 11.3711 5.59727C13.6952 5.59727 14.12 7.08974 14.12 9.12945V13.1094H14.07Z"
+                                 />
+                           </svg>
+                        </a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </footer>
+      <!-- ====== Footer Section End -->
+      <!-- ====== All Scripts -->
+      <script>
+         // ==== for menu scroll
+         const pageLink = document.querySelectorAll('.menu-scroll');
+         pageLink.forEach((elem) => {
+           elem.addEventListener('click', (e) => {
+             e.preventDefault();
+             document.querySelector(elem.getAttribute('href')).scrollIntoView({
+               behavior: 'smooth',
+               offsetTop: 1 - 60,
+             });
+           });
+         });
+         
+         // section menu active
+         function onScroll(event) {
+           const sections = document.querySelectorAll('.menu-scroll');
+           const scrollPos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+           for (let i = 0; i < sections.length; i++) {
+             const currLink = sections[i];
+             const val = currLink.getAttribute('href');
+             const refElement = document.querySelector(val);
+             const scrollTopMinus = scrollPos + 73;
+             if (refElement.offsetTop <= scrollTopMinus && refElement.offsetTop + refElement.offsetHeight > scrollTopMinus) {
+               document.querySelector('.menu-scroll').classList.remove('active');
+               currLink.classList.add('active');
+             } else {
+               currLink.classList.remove('active');
+             }
+           }
+         }
+         window.document.addEventListener('scroll', onScroll);
+         
+         // Toggle navbar on smaller devices
+         const navbarToggler = document.getElementById('navbarToggler');
+         const navbarCollapse = document.getElementById('navbarCollapse');
+         
+         navbarToggler.addEventListener('click', () => {
+           navbarCollapse.classList.toggle('hidden');
+         });
+      </script>
+      <style>
+         /* Hide the menu by default on small screens */
+         /* Show menu when toggled */
+         #navbarCollapse:not(.hidden) {
+         display: block;
+         }
+      </style>
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "eatZzepro",
+          "description": "QR code menu and contactless ordering system for restaurants.",
+          "operatingSystem": "All",
+          "applicationCategory": "BusinessApplication",
+          "offers": {
+            "@type": "Offer",
+            "price": "99",
+            "priceCurrency": "INR",
+            "priceValidUntil": "2025-12-31",
+            "availability": "https://schema.org/InStock",
+            "url": "https://eatzzepro.com/",
+            "validFrom": "2025-01-01",
+            "durationOfWarranty": "P1M",
+            "eligibleRegion": "IN"
+          },
+          "url": "https://eatzzepro.com/"
+        }
         </script>
         
         
-
-
-
-
-
-
-    
-
-    
-    
-</body>
+   </body>
 </html>
