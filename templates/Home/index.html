@@ -24,7 +24,7 @@
         property="og:description"
         content="Boost your restaurant's efficiency with eatZzepro, a QR code menu and contactless ordering system. Simplify operations, improve customer satisfaction, and grow your business with our scalable SaaS platform."
       />
-      <meta property="og:image" content="https://eatzzepro.com/path-to-image.jpg" />
+      <meta property="og:image"nte content="https://eatzzepro.com/path-to-image.jpg" />
       
       <!-- Twitter -->
       <meta property="twitter:card" content="summary_large_image" />
@@ -34,7 +34,7 @@
         property="twitter:description"
         content="Boost your restaurant's efficiency with eatZzepro, a QR code menu and contactless ordering system. Simplify operations, improve customer satisfaction, and grow your business with our scalable SaaS platform."
       />
-      <meta property="twitter:image" content="https://eatzzepro.com/path-to-image.jpg" />
+      <meta property="twitter:image" cont="https://eatzzepro.com/path-to-image.jpg" />
       
       <!-- Additional SEO Enhancements -->
       <link rel="canonical" href="https://eatzzepro.com/" />
@@ -43,7 +43,7 @@
       <link href="{% static 'Home/css/style.css' %}" rel="stylesheet">
   </head>
  
-   <body style="background-color: #f7f7f7;">
+   <body style="background-color: #fff5f5;">
       <!-- ====== Navbar Section Start -->
       <!-- Navbar Section Start -->
       <header class="header bg-transparent absolute top-0 left-0 z-40 w-full flex items-center transition">
@@ -100,9 +100,9 @@
                      </ul>
                      <!-- Sign In/Sign Up Buttons for Small Devices -->
                      <div class="block lg:hidden mt-4">
-                        <a href="signin.html" class="text-base font-semibold text-body-color hover:text-primary py-3 px-7 transition block"> Login </a>
+                        <a href="{% url 'restaurant-login' %}" class="text-base font-semibold text-body-color hover:text-primary py-3 px-7 transition block"> Login </a>
                         <a
-                           href="signup.html"
+                           href="{% url 'restaurant-registration' %}"
                            class="text-base font-bold text-white py-3 px-8 md:px-9 lg:px-8 xl:px-9 hover:shadow-signUp rounded-sm transition ease-in-out duration-300 block mt-2"
                            style="background-color: #ff6f61;"
                            >
@@ -112,9 +112,9 @@
                   </nav>
                   <!-- Sign In/Sign Up Buttons for Larger Devices -->
                   <div class="sm:flex justify-end hidden pr-16 lg:pr-0">
-                     <a href="signin.html" class="text-base font-semibold text-body-color hover:text-primary py-3 px-7 transition"> Login </a>
+                     <a href="{% url 'restaurant-login' %}" class="text-base font-semibold text-body-color hover:text-primary py-3 px-7 transition"> Login </a>
                      <a
-                        href="signup.html"
+                        href="{% url 'restaurant-registration' %}"
                         class="text-base font-bold text-white py-3 px-8 md:px-9 lg:px-8 xl:px-9 hover:shadow-signUp rounded-sm transition ease-in-out duration-300"
                         style="background-color: #ff6f61;"
                         >

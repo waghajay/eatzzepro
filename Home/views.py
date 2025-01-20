@@ -29,6 +29,12 @@ def index(request):
 
 # ------------------ Function Views for Registering New Restaurant --------------------------------
 
+def restaurantRegistration(request):
+    return render(request, 'Home/restaurant-registration.html')
+
+from django.contrib import messages
+from django.shortcuts import render, redirect
+
 def subscribeSubscription(request):
     if request.method == 'POST':
         restaurant_name = request.POST.get("restaurant_name")
@@ -36,32 +42,40 @@ def subscribeSubscription(request):
         phone_number = request.POST.get("phone_number")
         email = request.POST.get("email")
         password = request.POST.get("password")
-        plan = request.POST.get("selected_plan")
-        price = request.POST.get("selected_price")
-        
-        if User.objects.filter(username=email).exists():
-            messages.success(request, "Email already taken")
-            return render(request, 'Home/index.html', {"restaurant_name": restaurant_name, "email": email})
 
+        # Check if the email is already registered
+        if User.objects.filter(username=email).exists():
+            messages.error(request, "An account with this email already exists. Please use a different email.")
+            return render(
+                request, 
+                'Home/restaurant-registration.html', 
+                {"restaurant_name": restaurant_name, "email": email}
+            )
+
+        # Create a new user
         user = User.objects.create_user(username=email, password=password, email=email)
 
-        restaurant = RestaurantSubscription.objects.create(
+        # Create a restaurant subscription with default plan and price
+        RestaurantSubscription.objects.create(
             restaurant=user,
             restaurant_name=restaurant_name,
             owner_name=owner_name,
             phone_number=phone_number,
-            plan=plan,
-            price=price
+            plan=None,  # Default to None
+            price=None  # Default to None
         )
-        restaurant.save()
-        
-        restaurant_email=email
 
-        send_email_in_background(restaurant_email,restaurant_name, owner_name, phone_number, plan, price)
+        # Send a notification email
+        send_email_in_background(email, restaurant_name, owner_name, phone_number, None, None)
 
-        return JsonResponse({"success": True})
-    
-    return JsonResponse({"success": False})
+        # Display a success message and redirect to login
+        messages.success(request, "Account created successfully! You can now log in.")
+        return redirect("restaurant-login")
+
+    # If the method is not POST, redirect to the registration page
+    return redirect("restaurant-login")
+
+
 
 def send_mail_subscribe_subscription(restaurant_email,restaurant_name, owner_name, phone_number, plan, price):
     email_recipients = ['awagh3120@gmail.com']

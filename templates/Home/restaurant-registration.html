@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="robots" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="EatZzePro - A SaaS platform for restaurants to manage menus, generate QR codes, and streamline customer orders." />
+    <meta property="og:title" content="EatZzePro - Simplify Restaurant Management with SaaS" />
+    <meta property="og:description" content="EatZzePro is a SaaS platform empowering restaurants to register, add menus, generate QR codes for tables, and enhance the customer dining experience." />
+
+    <title>eatZzepro - Create New Account.</title>
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'global/images/favicon.png' %}" />
+    <link href="{% static 'global/vendor/swiper/css/swiper-bundle.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'global/css/style.css' %}" rel="stylesheet" />
+</head>
+
+<body class="body" style="background: #fff5f5;">
+    <div class="container mt-0">
+        <div class="row align-items-center justify-contain-center">
+            <div class="col-xl-12 mt-5">
+                <div class="card border-0">
+                    <div class="card-body login-bx">
+                        <div class="row mt-5" style="justify-content: center;">
+                            <div class="col-xl-4 col-md-6" style="background: white;border-radius: 20px;">
+                                <div class="sign-in-your">
+                                    <div class="text-center mb-3">
+                                        <div class="images">
+                                            <img src="{% static 'global/images/eatzze-modified.png' %}" width="100" alt="">
+                                        </div>
+                                        <h4 class="fs-20 font-w600 text-black">Create an Account for free...</h4>
+                                    </div>
+                                    {% if messages %}
+                                    <div class="alert alert-info alert-message" style="color: #475569;font-size: 1.1rem;background-color: #f8d7da;border: #f5c6cb;font-weight: 600;text-align: center;">
+                                        {% for message in messages %}
+                                        {{ message }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    <form method="post" action="{% url 'subscribe-subscription' %}" id="subscription-form">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label for="restaurant_name" class="mb-1"><strong>Restaurant Name</strong></label>
+                                            <input type="text" name="restaurant_name" id="restaurant_name" class="form-control" placeholder="Taj Hotel..." required autofocus />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="owner_name" class="mb-1"><strong>Owner Name</strong></label>
+                                            <input type="text" name="owner_name" id="owner_name" class="form-control" placeholder="Enter name..." required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="phone_number" class="mb-1"><strong>Phone Number</strong></label>
+                                            <input type="number" name="phone_number" id="phone_number" class="form-control" placeholder="Enter Number..." required />
+                                            <div id="phone-error" style="display:none; color: red;">Please enter a valid 10-digit phone number.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="email" class="mb-1"><strong>Email Address</strong></label>
+                                            <input type="email" name="email" id="email" class="form-control" placeholder="hello@example.com" required value="{{ email }}" />
+                                            <div id="email-error" style="display:none; color: red;">Please enter a valid email address.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="password" class="mb-1"><strong>Password</strong></label>
+                                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter Your Password" />
+                                            <div id="password-error" style="display:none; color: red;">Password must be at least 8 characters, including one uppercase letter, one lowercase letter, and one number.</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary btn-block shadow">Create an Account</button>
+                                        </div>
+                                    </form>
+                                    <div class="text-center mt-4 mb-2">
+										<div class="mb-3">
+											<a href="{% url "restaurant-login" %}">Already have an Account ? Login....</a>
+										</div>
+									</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- **********************************
+    Scripts
+    *********************************** -->
+    <!-- Required vendors -->
+    <script src="{% static 'global/vendor/global/global.min.js' %}"></script>
+    <script src="{% static 'global/vendor/swiper/js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'global/js/dlabnav-init.js' %}"></script>
+    <script src="{% static 'global/js/styleSwitcher.js' %}"></script>
+
+    <!-- Validation script -->
+    <script>
+        // Validate the form before submission
+        function validateForm(event) {
+            event.preventDefault(); // Prevent form from submitting normally
+            
+            // Get form inputs
+            const phoneNumber = document.getElementById("phone_number").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            
+            // Error messages
+            const phoneError = document.getElementById("phone-error");
+            const emailError = document.getElementById("email-error");
+            const passwordError = document.getElementById("password-error");
+            
+            let isValid = true;
+            
+            // Phone number validation
+            if (!/^\d{10}$/.test(phoneNumber)) {
+                phoneError.style.display = "block";
+                isValid = false;
+            } else {
+                phoneError.style.display = "none";
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailError.style.display = "block";
+                isValid = false;
+            } else {
+                emailError.style.display = "none";
+            }
+            
+			// Password validation
+			const passwordRegex = /^[A-Za-z\d]{8}$/;
+			if (!passwordRegex.test(password)) {
+				passwordError.style.display = "block";
+				isValid = false;
+			} else {
+				passwordError.style.display = "none";
+			}
+            
+            // If any validation fails, return false to prevent form submission
+            if (!isValid) {
+                return false;
+            }
+            
+            // If all validations pass, submit the form
+            document.getElementById("subscription-form").submit();
+        }
+
+        // Attach the validateForm function to form submission
+        document.getElementById("subscription-form").addEventListener("submit", validateForm);
+    </script>
+</body>
+
+</html>
